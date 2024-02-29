@@ -1,0 +1,14 @@
+[[pages]]
+path = "home.py"
+name = " About OpuSearch"
+icon = "📖"
+
+[[pages]]
+path = "pages/generation.py"
+name = " Generate Alignments"
+icon = "⚙️"
+
+[[pages]]
+path = "pages/search.py"
+name = " Search Alignments"
+icon = "🔍"
