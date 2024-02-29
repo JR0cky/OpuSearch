@@ -1,4 +1,4 @@
-# OPUS-OpenSubTitles-Processing
+# OpuSearch
 This is a Streamlit Application for the software project *OpuSearch*.
 
 ## Overview
