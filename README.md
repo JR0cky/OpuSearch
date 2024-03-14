@@ -3,7 +3,7 @@ This is a Streamlit Application for the software project *OpuSearch*.
 
 ## Setup Overview
 0. Download [Python 3.11](https://www.python.org/downloads/release/python-3116/) and make sure to add Python to your **Path Variable** (See [here](https://realpython.com/add-python-to-path/) for more information or take the instruction linked under 3.3). Better use the Python Website for installing instead of Microsoft Store (Windows). 
-1. Download [Git](https://git-scm.com/download/win). 
+1. Install Git for [Windows](https://git-scm.com/download/win) or for [macOS/Linux](https://git-scm.com/download/mac). If necessary, install [homebrew](https://brew.sh/) beforehand (macOS/Linux).
 2. Clone the repository.
 3. Create a virtual environment.
 4. Install the necessary packages into the virtual environment.
