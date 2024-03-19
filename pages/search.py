@@ -209,7 +209,7 @@ class SearchAlign:
     def __message_file_creation_stats(path=None):
         if path is not None:
             styled = f"""
-                    <div style="background-color: rgba(0, 128, 0, 0.8); 
+                    <div style="background-color: rgba(50, 205, 50, 0.5); 
                     padding: 10px;
                     border-radius: 5px;
                     color: black;">
@@ -228,7 +228,7 @@ class SearchAlign:
     def __message_file_creation_context(path_qual=None, path_quant=None):
         if path_qual is not None and path_quant is not None:
             styled = f"""
-                <div style="background-color: rgba(0, 128, 0, 0.8);
+                <div style="background-color: rgba(50, 205, 50, 0.5);
                 padding: 10px; 
                 border-radius: 5px;
                 color: black;">
@@ -252,7 +252,7 @@ class SearchAlign:
     @staticmethod
     def __message_file_creation_all(path_stats, path_qual, path_quant):
         styled = f"""
-              <div style="background-color: rgba(0, 128, 0, 0.8);
+              <div style="background-color: rgba(50, 205, 50, 0.5);
               padding: 10px; 
               border-radius: 5px;
               color: black;">

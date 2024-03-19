@@ -164,7 +164,7 @@ class GenAlign:
             # Check if file is empty
             if os.path.getsize(self.__gen_path_file) > 0:
                 styled = f"""
-                            <div style="background-color: rgba(0, 128, 0, 0.8); 
+                            <div style="background-color: rgba(50, 205, 50, 0.5); 
                             padding: 10px;
                             border-radius: 5px;
                             color: black;">
@@ -204,7 +204,7 @@ class GenAlign:
 
     def __message_download_generation(self):
         styled = f"""
-                    <div style="background-color: rgba(0, 128, 0, 0.8); 
+                    <div style="background-color: rgba(50, 205, 50, 0.5); 
                     padding: 10px;
                     border-radius: 5px;
                     color: black;">
