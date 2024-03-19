@@ -10,13 +10,13 @@ def show_intro():
                 " with ease as you generate alignments and employ regular expressions"
                 " for efficient searches.</span>", unsafe_allow_html=True)
     add_vertical_space(2)
-    with st.expander("What can I do with OpuSearch?"):
+    with st.expander("**What can I do with OpuSearch?**"):
         st.markdown("With OpuSearch you can generate alignments and search them after using regular expressions. "
                     "The source files used for the generation are provided by Opus OpenSubtitles **add citation** "
                     "and ",
                     unsafe_allow_html=True)
     add_vertical_space(1)
-    with st.expander("What is an alignment?"):
+    with st.expander("**What is an alignment?**"):
         st.markdown("An alignment in parallel corpora is the matching of equivalent "
                     "texts or segments in different languages. "
                     "It enables the association of corresponding elements for tasks like translation "
@@ -24,7 +24,7 @@ def show_intro():
                     "**source** and a **target**.",
                     unsafe_allow_html=True)
     add_vertical_space(1)
-    with st.expander("How can I generate alignments?"):
+    with st.expander("**How can I generate alignments?**"):
         st.markdown("You can generate alignments out of source files on the page **Generate Alignments**. "
                     "For this you first need to decide for the mode of the source files: "
                     "**normal** or **parsed**. Afterwards you set the languages for the source "
@@ -36,7 +36,7 @@ def show_intro():
                     "you need to take some time to download the necessary data.",
                     unsafe_allow_html=True)
     add_vertical_space(1)
-    with st.expander("What is the difference between 'parsed' and 'normal' for generating alignments?"):
+    with st.expander("**What is the difference between 'parsed' and 'normal' for generating alignments?**"):
         st.markdown("The parsed version contains metadata, such as the lemma "
                     "and Part of Speech (POS) tag for every token, whereas the normal version "
                     "only contains the text itself. "
@@ -45,7 +45,7 @@ def show_intro():
                     "information, which might be useful later on.",
                     unsafe_allow_html=True)
     add_vertical_space(1)
-    with st.expander("How can I search alignments?"):
+    with st.expander("**How can I search alignments?**"):
         st.markdown("After generating the alignments, you can search them using regular expressions. In the first step,"
                     " you select the file you want to search through (the output of the generation). "
                     "For this, you can either select the normal or parsed format."
@@ -95,6 +95,18 @@ def show_intro():
                    "files have been created. A maximum of three paths can be shown.</span> | <span style='font-size: " \
                    "13px'>All Option Types and Language Modes</span> |\n"
         st.markdown(content, unsafe_allow_html=True)
+    add_vertical_space(1)
+    with st.expander("**What can I do with the search results?**"):
+        st.markdown(
+            "You can get two kinds of output for the search:",
+            unsafe_allow_html=True)
+        st.markdown("* statistics", unsafe_allow_html=True)
+        st.markdown("* context", unsafe_allow_html=True)
+        st.markdown("The content of both files is linked via the file IDs that are displayed "
+                    "in the respective output. So if you are looking for a specific phrase "
+                    "displayed in the statistics you can locate the phrase in the context files by"
+                    " searching for the ID.", unsafe_allow_html=True)
+
 
 
 def main():
