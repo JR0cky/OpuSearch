@@ -4,6 +4,7 @@ import pandas as pd
 from collections import defaultdict
 from model.processing import Processing, Preprocessing
 
+# TODO remove duplicates for alignments counts (match src match trg and alignment counts) in final stage (see comments)
 
 class BilingualStats:
     """Get bilingual matches from corresponding regex and
@@ -343,6 +344,8 @@ class BilingualStats:
                                 how='left')
             # add column with Regex
             all_data['Regex'] = self.__regex
+            # drop columns for POS count
+            all_data = all_data.drop(["Count_POS_src", "Count_POS_trg"], axis=1)
             if self.__src_aggregate:
                 # Safely evaluate the string representations of lists back into actual lists
                 all_data["POS_src"] = all_data["POS_src"].apply(ast.literal_eval)
@@ -352,9 +355,14 @@ class BilingualStats:
                 all_data["Token_src"] = all_data["Token_src"].apply(ast.literal_eval)
                 # Explode the lists
                 exploded = all_data.explode(["POS_src", "Lemma_src", "Token_src"])
+                # remove duplicates for count alignments
+                exploded = exploded.drop_duplicates(subset=[f'Match {l1}', f'Match {l2}', 'Count_Alignment'])
                 # write data to csv
                 exploded.to_csv(path)
             else:
+                # remove duplicates for count alignments
+                all_data = all_data.drop_duplicates(subset=[f'Match {l1}', f'Match {l2}', 'Count_Alignment'])
+                # write data to csv
                 all_data.to_csv(path)
         return path
 
