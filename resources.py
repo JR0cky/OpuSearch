@@ -145,6 +145,13 @@ def app_appear():
                     "([Jörg Tiedemann](https://scholar.google.com/citations?user=j6V-rOUAAAAJ))  "
                     "and [opustools](https://pypi.org/project/opustools/) "
                     "([Aulamo et al. 2020](https://aclanthology.org/2020.lrec-1.467/)).")
+        for i in range(0, 5):
+            st.sidebar.markdown("<br>", unsafe_allow_html=True)
+        st.markdown('<span style="color:orange;"><b>Warning:<br></b></span>', unsafe_allow_html=True)
+        st.markdown('<span style="color:orange;">Do not delete any folders or files from the existing structure,'
+                    ' as this may cause the application to crash.</span>', unsafe_allow_html=True)
+
+
 
 
 def edit_design():
