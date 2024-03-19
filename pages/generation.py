@@ -382,7 +382,7 @@ class GenAlign:
     def build(self):
         rename_files()
         edit_design()
-        st.title("Generate Alignments")
+        st.title("Generate Alignments", anchor=False)
         add_vertical_space(2)
         self.__handle_paths()
         self.__handle_languages()

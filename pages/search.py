@@ -442,7 +442,7 @@ class SearchAlign:
     def build(self):
         rename_files()
         edit_design()
-        st.title("Search Alignments")
+        st.title("Search Alignments", anchor=False)
         add_vertical_space(2)
         self.__handle_search()
 

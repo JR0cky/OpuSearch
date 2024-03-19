@@ -5,7 +5,7 @@ st.set_page_config(page_title="Introduction", page_icon="📖", layout="centered
 
 
 def show_intro():
-    st.title("Welcome to OpuSearch")
+    st.title("Welcome to OpuSearch", anchor=False)
     st.markdown("<span style='font-size:20px;'>With OpuSearch, explore the vast collection of Opus OpenSubtitles"
                 " with ease as you generate alignments and employ regular expressions"
                 " for efficient searches.</span>", unsafe_allow_html=True)
