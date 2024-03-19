@@ -16,6 +16,8 @@ class GenAlign:
         # path variables for subscript
         self.__script_path = None
         self.__src_path = None
+        # path variable for language pairs
+        self.__lang_path = None
         self.__gen_path = None
         # capture whether parsed file should be generated
         # (adapt choice of languages accordingly)
@@ -57,12 +59,13 @@ class GenAlign:
         self.__script_path = os.path.join(parent_directory, "model", "get_alignments.py")
         self.__src_path = os.path.join(parent_directory, "data", "source_files")
         self.__gen_path = os.path.join(parent_directory, "data", "generated")
+        self.__lang_path = os.path.join(parent_directory, "data", "language_pairs")
 
     def __handle_languages(self):
         # csv for languages with parse option
-        self.__languages = self.__load_data(self.__src_path, parsed=True)
+        self.__languages = self.__load_data(self.__lang_path, parsed=True)
         # csv for languages without parse option
-        self.__languages_no_parse = self.__load_data(self.__src_path, parsed=False)
+        self.__languages_no_parse = self.__load_data(self.__lang_path, parsed=False)
         # list of languages that can also be generated in parsed format
         self.__lang = sorted(list(self.__languages["language"]))
         # list of languages that can be generated in normal format
