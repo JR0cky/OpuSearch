@@ -116,6 +116,25 @@ def app_appear():
     #     </style>
     #     """,
     #     unsafe_allow_html=True)
+    footer_html = """
+        <style>
+            .footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                color: white;
+                text-align: right;
+                padding: 10px 50px 10px 0;
+            }
+        </style>
+        <div class="footer">
+            <p>Made with Streamlit</p>
+        </div>
+    """
+
+    # Render the footer using st.markdown
+    st.markdown(footer_html, unsafe_allow_html=True)
     show_pages_from_config()
     with st.sidebar:
         st.sidebar.markdown("<br>", unsafe_allow_html=True)
