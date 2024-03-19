@@ -99,15 +99,15 @@ class SearchAlign:
         # Path for the download directory
         self.__root_path = os.path.join(data_dir, "search_results")
         self.__gen_path = os.path.join(data_dir, "generated")
-        self.__src_path = os.path.join(data_dir, "source_files")
+        self.__src_path = os.path.join(data_dir, "language_pairs")
 
     @staticmethod
     def __no_matches():
         styled = f"""
-                <div style="background-color: rgba(255, 0, 0, 0.1);
+                <div style="background-color: rgba(255, 165, 0, 0.8);
                  padding: 10px; 
                  border-radius: 5px;
-                 color: darkred;">
+                 color: black;">
                     <b>Error:</b>
                     <br>
                     There are no search results. Please check if: <br>
@@ -121,10 +121,10 @@ class SearchAlign:
     @staticmethod
     def __no_selection():
         styled = f"""
-                <div style="background-color: rgba(255, 0, 0, 0.1);
+                <div style="background-color: rgba(255, 165, 0, 0.8);
                  padding: 10px; 
                  border-radius: 5px;
-                 color: darkred;">
+                 color: black;">
                     Please select at least one of the follwing options:<br>
                     <br>
                     * Get Context
@@ -138,10 +138,10 @@ class SearchAlign:
     def __no_regex():
         placeholder = st.empty()
         styled = f"""
-            <div style="background-color: rgba(255, 215, 0, 0.5);
+            <div style="background-color: rgba(255, 165, 0, 0.8);
              padding: 10px; 
              border-radius: 5px;
-             color: #9c640c;">
+             color: black;">
                 Please enter a regular expression and press <b>ENTER</b> to apply it.
                 <br>
             </div>
@@ -209,10 +209,10 @@ class SearchAlign:
     def __message_file_creation_stats(path=None):
         if path is not None:
             styled = f"""
-                    <div style="background-color: rgba(0, 128, 0, 0.1); 
+                    <div style="background-color: rgba(0, 128, 0, 0.8); 
                     padding: 10px;
                     border-radius: 5px;
-                    color: darkgreen;">
+                    color: black;">
                         <b>The search was successful</b>.
                         <br>
                         <br>
@@ -228,10 +228,10 @@ class SearchAlign:
     def __message_file_creation_context(path_qual=None, path_quant=None):
         if path_qual is not None and path_quant is not None:
             styled = f"""
-                <div style="background-color: rgba(0, 128, 0, 0.1);
+                <div style="background-color: rgba(0, 128, 0, 0.8);
                 padding: 10px; 
                 border-radius: 5px;
-                color: darkgreen;">
+                color: black;">
                     <b>The search was successful</b>.
                     <br>
                     <br>
@@ -252,10 +252,10 @@ class SearchAlign:
     @staticmethod
     def __message_file_creation_all(path_stats, path_qual, path_quant):
         styled = f"""
-              <div style="background-color: rgba(0, 128, 0, 0.1);
+              <div style="background-color: rgba(0, 128, 0, 0.8);
               padding: 10px; 
               border-radius: 5px;
-              color: darkgreen;">
+              color: black;">
                   <b>The search was successful</b>.
                   <br>
                   <br>

@@ -137,10 +137,10 @@ class GenAlign:
         files_links = "<br>".join([f"<a href='{file}'>{file}</a>" for file in files])
         st.markdown(
             f"""
-               <div style="background-color: rgba(255, 0, 0, 0.1);
+               <div style="background-color: rgba(255, 255, 0, 0.8);
                 padding: 10px;
                 border-radius: 5px;
-                 color: darkred;">
+                 color: black;">
                    <b>Note:</b>
                    <br>
                    You have terminated the generation process. 
@@ -164,10 +164,10 @@ class GenAlign:
             # Check if file is empty
             if os.path.getsize(self.__gen_path_file) > 0:
                 styled = f"""
-                            <div style="background-color: rgba(0, 128, 0, 0.1); 
+                            <div style="background-color: rgba(0, 128, 0, 0.8); 
                             padding: 10px;
                             border-radius: 5px;
-                            color: darkgreen;">
+                            color: black;">
                                 <b>The alignment file has been created successfully.</b>
                                 <br>
                                 <br>
@@ -183,20 +183,20 @@ class GenAlign:
                 # Delete empty file
                 os.remove(self.__gen_path_file)
                 styled = f"""
-                            <div style="background-color: rgba(255, 0, 0, 0.1); 
+                            <div style="background-color: rgba(255, 165, 0, 0.8); 
                             padding: 10px;
                             border-radius: 5px;
-                            color: darkred;">
+                            color: black;">
                                 <b>Error:</b> The alignment file could not be created or is empty.
                             </div>
                             """
                 st.markdown(styled, unsafe_allow_html=True)
         else:
             styled = f"""
-                        <div style="background-color: rgba(255, 0, 0, 0.1); 
+                        <div style="background-color: rgba(255, 165, 0, 0.8); 
                         padding: 10px;
                         border-radius: 5px;
-                        color: darkred;">
+                        color: black;">
                             <b>Error:</b> The alignment file could not be found. {self.__gen_path_file}
                         </div>
                         """
@@ -204,10 +204,10 @@ class GenAlign:
 
     def __message_download_generation(self):
         styled = f"""
-                    <div style="background-color: rgba(0, 128, 0, 0.1); 
+                    <div style="background-color: rgba(0, 128, 0, 0.8); 
                     padding: 10px;
                     border-radius: 5px;
-                    color: darkgreen;">
+                    color: black;">
                         <b>The files have been downloaded successfully.</b>
                         <br>
                         <br>
@@ -312,10 +312,10 @@ class GenAlign:
         parsed_data = self.__parse_output(self.__gen_prompt)
         if not len(parsed_data) > 0:
             styled = f"""
-                        <div style="background-color: rgba(255, 0, 0, 0.1); 
+                        <div style="background-color: rgba(255, 165, 0, 0.8); 
                         padding: 10px;
                         border-radius: 5px;
-                        color: darkred;">
+                        color: black;">
                             <b>Error:</b>  <br> There are no source files for this language combination:
                             {self.__lang_src} - {self.__lang_trg}. <br>
                              Please try a different combination.
@@ -326,10 +326,10 @@ class GenAlign:
             try:
                 st.markdown(
                     f"""
-                       <div style="background-color: rgba(255, 255, 0, 0.1);
+                       <div style="background-color: rgba(255, 255, 255, 0.8);
                         padding: 10px;
                         border-radius: 5px;
-                         color: darkyellow;">
+                         color: black;">
                         You need to download the following source files to generate alignments.
                         How do you want to proceed?</div> """,
                     unsafe_allow_html=True)
@@ -337,10 +337,10 @@ class GenAlign:
                 # Parsing logic using other method
                 for data in parsed_data:
                     st.markdown(
-                        f"""<div style="background-color: rgba(255, 255, 0, 0.1);
+                        f"""<div style="background-color: rgba(255, 255, 255, 0.8);
                                     padding: 10px;
                                     border-radius: 5px;
-                                     color: darkyellow;">
+                                     color: black;">
                                     <strong>File</strong>: {data['url']} &nbsp;&nbsp;&nbsp; 
                                     <strong>Size</strong>: {data['size']}
                                 </div>""",
