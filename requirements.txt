@@ -1,0 +1,6 @@
+opustools==1.6.1
+pandas==2.0.1
+st_pages==0.4.5
+streamlit_extras==0.4.0
+streamlit_js_eval==0.1.5
+streamlit==1.31.1
