@@ -10,6 +10,7 @@ from resources import edit_design, rename_files
 
 st.set_page_config(page_title="Data generation", page_icon="⚙️", layout="centered")
 
+# TODO edit path logic to handle external paths for generated and source files
 
 class GenAlign:
     def __init__(self):
@@ -32,6 +33,10 @@ class GenAlign:
         self.__lang_src = st.session_state.src if "src" in st.session_state else None
         # source_files language for generation
         self.__lang_trg = st.session_state.src if "trg" in st.session_state else None
+        # path variable for source files on external hard drive
+        self.__src_path_hard = st.session_state.src_path_hard if "src_path_hard" in st.session_state else None
+        # path variable for generated files on external hard drive
+        self.__gen_path_hard = st.session_state.gen_path_hard if "gen_path_hard" in st.session_state else None
         # limit for number of alignments to be generated
         self.__limit = st.session_state.limit if 'limit' in st.session_state \
             else None
@@ -53,12 +58,14 @@ class GenAlign:
     def __handle_paths(self):
         # Determine the current directory
         current_directory = os.path.dirname(os.path.abspath(__file__))
-        # Cut off the last directory of the current directory
+        # Cut off the last directory of the current directoryif
         parent_directory = os.path.dirname(current_directory)
         # Construct the paths relative to the parent directory
         self.__script_path = os.path.join(parent_directory, "model", "get_alignments.py")
-        self.__src_path = os.path.join(parent_directory, "data", "source_files")
-        self.__gen_path = os.path.join(parent_directory, "data", "generated")
+        if self.__src_path_hard is None:
+            self.__src_path = os.path.join(parent_directory, "data", "source_files")
+        if self.__gen_path_hard is None:
+            self.__gen_path = os.path.join(parent_directory, "data", "generated")
         self.__lang_path = os.path.join(parent_directory, "data", "language_pairs")
 
     def __handle_languages(self):
@@ -379,11 +386,58 @@ class GenAlign:
                               'documents': documents})
         return file_info
 
+    def __handle_external_harddrive(self):
+        st.markdown(
+            f"""
+               <div style="background-color: rgba(255, 255, 255, 0.8);
+                padding: 10px;
+                border-radius: 5px;
+                 color: black;">
+                You will need sufficient storage space to store the corpus files that are used 
+                to create the alignments. If you do not have enough space on your PC, you may connect an external
+                 hard drive. Choose your preferred location of the source files and/or the 
+                 generated aligments. </div> """,
+            unsafe_allow_html=True)
+        add_vertical_space(1)
+        col1, col2 = st.columns(2)
+        with col1:
+            st.button("Get External Path for Source Files",
+                      on_click=lambda: self.__assign_paths_harddrive(source_files=True))
+        with col2:
+            st.button("Get External Path for Generated Files",
+                      on_click=lambda: self.__assign_paths_harddrive(source_files=False))
+        add_vertical_space(2)
+
+    def __assign_paths_harddrive(self, source_files=True):
+        path = os.path.dirname(os.path.abspath(__file__))
+        p = subprocess.Popen([sys.executable, "tkinter_file_dialog.py"], cwd=path,
+                             stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+        result, error = p.communicate()
+        p.terminate()
+
+        # Get the directory containing the main script
+        main_script_dir = os.path.dirname(os.path.abspath(__file__))
+
+        # Construct the absolute path to "selected_file_path.txt"
+        file_path = os.path.join(main_script_dir, "../data/selected_file_path.txt")
+
+        # Open "selected_file_path.txt" and read the folder path
+        with open(file_path, "r", encoding="utf-8") as file_in:
+            folder_path = file_in.read().strip()
+        if source_files:
+            self.__src_path_hard = folder_path
+            st.write("File Path:", self.__src_path_hard)
+        else:
+            self.__gen_path_hard = folder_path
+            st.write("File Path:", self.__gen_path_hard)
+
     def build(self):
         rename_files()
         edit_design()
         st.title("Generate Alignments", anchor=False)
         add_vertical_space(2)
+        self.__handle_external_harddrive()
         self.__handle_paths()
         self.__handle_languages()
         self.__handle_generation()

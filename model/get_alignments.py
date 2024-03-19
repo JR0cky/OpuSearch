@@ -1,7 +1,8 @@
 import os
 import sys
 import opustools
-import pandas as pd
+
+# TODO edit path logic to handle external paths for generated and source files
 
 
 def prepare_alignments(src, trg, limit, parsed=False, time_stamps=False):
