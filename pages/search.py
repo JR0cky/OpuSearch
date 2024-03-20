@@ -1,8 +1,11 @@
 import os
 import re
+import subprocess
+import sys
+from pathlib import Path
 import streamlit as st
 import pandas as pd
-from resources import edit_design, scroll_top, rename_files
+from resources import edit_design, scroll_top, rename_files, info_external_hard_drive
 from model.monolingual_context import MonolingualContext
 from model.bilingual_context import BilingualContext
 from model.monolingual_statistics import MonolingualStats
@@ -19,15 +22,12 @@ st.set_page_config(page_title="Search Data", page_icon="🔎", layout="centered"
 class SearchAlign:
     def __init__(self):
         # get path to root
-        self.__root_path = None
-        # create needed paths
-        self.__handle_paths()
-        # list of generated files to choose from
-        self.__generated = self.__get_generated(self.__gen_path)
-        # csv for languages with parse option
-        self.__languages = self.__load_data(self.__src_path)
-        # list of languages that can also be generated in parsed format
-        self.__lang = sorted(list(self.__languages["language"]))
+        self.__search_path = None
+        # path variable for source files on external hard drive
+        self.__search_path_hard = st.session_state["search_path_hard"] if "search_path_hard" in st.session_state \
+            else None
+        # path variable for generated files on external hard drive
+        self.__gen_path_hard = st.session_state["gen_path_hard"] if "gen_path_hard" in st.session_state else None
         # language code for source_files language
         self.__code_src = st.session_state.code_src \
             if 'code_src' in st.session_state else None
@@ -90,6 +90,14 @@ class SearchAlign:
         self.__path_quant = ""
         self.__search_text = "The alignments are being searched. " \
                              "Please wait a moment ☕."
+        # create needed paths
+        self.__handle_paths()
+        # list of generated files to choose from
+        self.__generated = self.__get_generated(self.__gen_path)
+        # csv for languages with parse option
+        self.__languages = self.__load_data(self.__src_path)
+        # list of languages that can also be generated in parsed format
+        self.__lang = sorted(list(self.__languages["language"]))
 
     def __handle_paths(self):
         # Get the absolute path of the directory containing the script
@@ -97,8 +105,14 @@ class SearchAlign:
         # Navigate up one directory to access the 'data' directory
         data_dir = os.path.abspath(os.path.join(script_dir, os.pardir, "data"))
         # Path for the download directory
-        self.__root_path = os.path.join(data_dir, "search_results")
-        self.__gen_path = os.path.join(data_dir, "generated")
+        if self.__search_path_hard is None:
+            self.__search_path = os.path.join(data_dir, "search_results")
+        else:
+            self.__search_path = self.__search_path_hard
+        if self.__gen_path_hard is None:
+            self.__gen_path = os.path.join(data_dir, "generated")
+        else:
+            self.__gen_path = self.__gen_path_hard
         self.__src_path = os.path.join(data_dir, "language_pairs")
 
     @staticmethod
@@ -365,10 +379,10 @@ class SearchAlign:
                     if len(matches) > 0:
                         self.__path_qual = mono_context.write_context_qual_mono(
                             lang=str(self.__mono_lang).strip(),
-                            root_path=self.__root_path)
+                            root_path=self.__search_path)
                         self.__path_quant = mono_context.write_context_quant_mono(
                             lang=str(self.__mono_lang).strip(),
-                            root_path=self.__root_path)
+                            root_path=self.__search_path)
 
                     else:
                         scroll_top()
@@ -384,7 +398,7 @@ class SearchAlign:
                     if counts:
                         self.__path_stats = mono_matches.write_monolingual_stats(
                             lang=str(self.__mono_lang).strip(),
-                            root_path=self.__root_path)
+                            root_path=self.__search_path)
                     else:
                         scroll_top()
                         self.__no_matches()
@@ -402,10 +416,10 @@ class SearchAlign:
                     if len(matches) > 0:
                         self.__path_qual = bil_context.write_context_qual_bil(
                             l1=str(self.__search_src).strip(), l2=str(self.__search_trg).strip(),
-                            root_path=self.__root_path)
+                            root_path=self.__search_path)
                         self.__path_quant = bil_context.write_context_quant_bil(
                             l1=str(self.__search_src).strip(), l2=str(self.__search_trg).strip(),
-                            root_path=self.__root_path)
+                            root_path=self.__search_path)
                     else:
                         scroll_top()
                         self.__no_matches()
@@ -420,7 +434,7 @@ class SearchAlign:
                         self.__path_stats = bil_matches.write_bilingual_stats(
                             l1=str(self.__search_src).strip(),
                             l2=str(self.__search_trg).strip(),
-                            root_path=self.__root_path)
+                            root_path=self.__search_path)
                     else:
                         scroll_top()
                         self.__no_matches()
@@ -439,10 +453,38 @@ class SearchAlign:
             elif self.__context:
                 self.__message_file_creation_context(path_qual=self.__path_qual, path_quant=self.__path_quant)
 
+
+
+
+    @staticmethod
+    def __assign_paths_harddrive(st, source_files=True):
+        path = os.path.dirname(os.path.abspath(__file__))
+        p = subprocess.Popen([sys.executable, "tkinter_file_dialog.py"], cwd=path,
+                             stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+        result, error = p.communicate()
+        p.terminate()
+
+        # Get the directory containing the main script
+        main_script_dir = os.path.dirname(os.path.abspath(__file__))
+
+        # Construct the absolute path to "selected_file_path.txt"
+        file_path = os.path.join(main_script_dir, "../data/selected_file_path.txt")
+
+        # Open "selected_file_path.txt" and read the folder path
+        with open(file_path, "r", encoding="utf-8") as file_in:
+            folder_path = file_in.read().strip()
+        if source_files:
+            st.session_state["src_path_hard"] = Path(os.path.abspath(folder_path)).as_posix()
+        else:
+            st.session_state["gen_path_hard"] = Path(os.path.abspath(folder_path)).as_posix()
+
     def build(self):
         rename_files()
         edit_design()
         st.title("Search Alignments", anchor=False)
+        add_vertical_space(2)
+        info_external_hard_drive(st)
         add_vertical_space(2)
         self.__handle_search()
 
