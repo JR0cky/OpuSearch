@@ -7,8 +7,9 @@ import pandas as pd
 from io import StringIO
 from pathlib import Path
 from streamlit_extras.add_vertical_space import add_vertical_space
-from resources import edit_design, rename_files
+from resources import edit_design, rename_files, info_external_hard_drive
 
+# TODO fix error alignment file could not be created or is empty for existing files
 st.set_page_config(page_title="Data generation", page_icon="⚙️", layout="centered")
 
 
@@ -363,57 +364,13 @@ class GenAlign:
                               'documents': documents})
         return file_info
 
-    def __handle_external_harddrive(self):
-        st.markdown(
-            f"""
-               <div style="background-color: rgba(255, 255, 255, 0.8);
-                padding: 10px;
-                border-radius: 5px;
-                 color: black;">
-                You will need sufficient storage space to store the corpus files that are used 
-                to create the alignments. If you do not have enough space on your PC, you may connect an external
-                 hard drive. Choose your preferred location of the source files and/or the 
-                 generated aligments. </div> """,
-            unsafe_allow_html=True)
-        add_vertical_space(3)
-        col1, col2 = st.columns(2)
-        with col1:
-            st.button("Get External Path for Source Files",
-                      on_click=lambda: self.__assign_paths_harddrive(source_files=True))
-        with col2:
-            st.button("Get External Path for Generated Files",
-                      on_click=lambda: self.__assign_paths_harddrive(source_files=False))
-        add_vertical_space(2)
-
-    @staticmethod
-    def __assign_paths_harddrive(source_files=True):
-        path = os.path.dirname(os.path.abspath(__file__))
-        p = subprocess.Popen([sys.executable, "tkinter_file_dialog.py"], cwd=path,
-                             stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
-        result, error = p.communicate()
-        p.terminate()
-
-        # Get the directory containing the main script
-        main_script_dir = os.path.dirname(os.path.abspath(__file__))
-
-        # Construct the absolute path to "selected_file_path.txt"
-        file_path = os.path.join(main_script_dir, "../data/selected_file_path.txt")
-
-        # Open "selected_file_path.txt" and read the folder path
-        with open(file_path, "r", encoding="utf-8") as file_in:
-            folder_path = file_in.read().strip()
-        if source_files:
-            st.session_state["src_path_hard"] = Path(os.path.abspath(folder_path)).as_posix()
-        else:
-            st.session_state["gen_path_hard"] = Path(os.path.abspath(folder_path)).as_posix()
-
     def build(self):
         rename_files()
         edit_design()
         st.title("Generate Alignments", anchor=False)
         add_vertical_space(2)
-        self.__handle_external_harddrive()
+        info_external_hard_drive(st)
+        add_vertical_space(2)
         self.__handle_paths()
         self.__handle_languages()
         self.__handle_generation()
