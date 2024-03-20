@@ -106,6 +106,11 @@ def show_intro():
                     "in the respective output. So if you are looking for a specific phrase "
                     "displayed in the statistics you can locate the phrase in the context files by"
                     " searching for the ID.", unsafe_allow_html=True)
+    with st.expander("**Can I use an external hard drive for storing the data?**"):
+        st.markdown("Yes it is possible to store the source files, the generated alignments and your search results "
+                    "on an external hard drive of your choice. "
+                    "For more information go to the page *Use External Hard Drive*.",
+                    unsafe_allow_html=True)
 
 
 
