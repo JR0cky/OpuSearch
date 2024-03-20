@@ -14,6 +14,8 @@ from streamlit_extras.add_vertical_space import add_vertical_space
 
 st.set_page_config(page_title="Search Data", page_icon="🔎", layout="centered")
 
+# TODO check functionality of search and model for search again! (see overview of options)
+# TODO catch IndexError for bilingual context, happens when "e" is searched in basque
 # TODO catch 'error: global flags not at the start of the expression at position 17' (Regex, wait for reproduction)
 # TODO handle mystery languages (normal mode)
 # TODO disclaimer for search results in source_files for wrong language resulting from alignments (for all search modes), e.g. "Que"
@@ -140,7 +142,7 @@ class SearchAlign:
                  padding: 10px; 
                  border-radius: 5px;
                  color: black;">
-                    Please select at least one of the follwing options:<br>
+                    Please select at least one of the following options:<br>
                     <br>
                     * Get Context
                     <br>
@@ -307,6 +309,17 @@ class SearchAlign:
                 self.__languages['code'] == trg, "language"].item()
 
     def __handle_search(self):
+        st.markdown(
+            f"""
+                       <div style="background-color: rgba(255, 255, 255, 0.8);
+                        padding: 10px;
+                        border-radius: 5px;
+                         color: black;">
+                        <b>Attention: </b>For the bilingual search you can only apply the search term for 
+                        the source language. For all cases you can use case-insensitive search.
+                        </div> """,
+            unsafe_allow_html=True)
+        add_vertical_space(2)
         # make user select search file
         self.__search_file = st.selectbox("Choose a File to Search through",
                                           self.__generated, key="search_file")
@@ -335,6 +348,7 @@ class SearchAlign:
                 st.markdown(f"**File Format:**", unsafe_allow_html=True)
                 st.markdown(f"{self.__parse_search}", unsafe_allow_html=True)
             st.text_input("Regular Expression for Searching the Data", key="regex")
+            st.write(self.__regex)
             if self.__regex is None:
                 self.__no_regex()
             else:
@@ -355,7 +369,7 @@ class SearchAlign:
                     st.checkbox("Summarise Lines for 'src' ", value=True, key="aggr_src")
                 st.checkbox("Show Paths for Created Files", value=True, key="show_messages")
                 add_vertical_space(3)
-                st.button("Do the Search!", key="search_results",
+                st.button("Do the Search!", key="search",
                           on_click=self.__call_search_func)
 
     def __call_search_func(self):

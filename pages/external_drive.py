@@ -22,6 +22,9 @@ def intro():
                 "The same goes for the generated files and the search results respectively."
                 "If you download the corpus files manually,"
                 " make sure to put them under *source_files*.", unsafe_allow_html=True)
+    st.markdown("**Attention**: If you refresh the page, "
+                "the folders of the local project's directory will be taken as default."
+                , unsafe_allow_html=True)
     st.markdown("Press the button below to navigate to the directory, in which you want to save your project's data:"
                 , unsafe_allow_html=True)
     st.button("Choose Directory", on_click=assign_paths_harddrive)
