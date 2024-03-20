@@ -104,11 +104,12 @@ class SearchAlign:
         script_dir = os.path.dirname(os.path.abspath(__file__))
         # Navigate up one directory to access the 'data' directory
         data_dir = os.path.abspath(os.path.join(script_dir, os.pardir, "data"))
-        # Path for the download directory
+        # Path for search results directory
         if self.__search_path_hard is None:
-            self.__search_path = os.path.join(data_dir, "search_results")
+            self.__search_path_results = os.path.join(data_dir, "search_results")
         else:
-            self.__search_path = self.__search_path_hard
+            self.__search_path_results = self.__search_path_hard
+        # Path for alignments directory
         if self.__gen_path_hard is None:
             self.__gen_path = os.path.join(data_dir, "generated")
         else:
@@ -310,7 +311,7 @@ class SearchAlign:
         self.__search_file = st.selectbox("Choose a File to Search through",
                                           self.__generated, key="search_file")
         # extract path from file
-        self.__search_path = os.path.join(self.__gen_path, self.__search_file)
+        self.__search_path = Path(os.path.join(self.__gen_path, self.__search_file)).as_posix()
         if self.__search_file != "-":
             self.__parse_file_name()
             self.__lang_to_val(self.__search_src, self.__search_trg,
@@ -379,10 +380,10 @@ class SearchAlign:
                     if len(matches) > 0:
                         self.__path_qual = mono_context.write_context_qual_mono(
                             lang=str(self.__mono_lang).strip(),
-                            root_path=self.__search_path)
+                            root_path=self.__search_path_results)
                         self.__path_quant = mono_context.write_context_quant_mono(
                             lang=str(self.__mono_lang).strip(),
-                            root_path=self.__search_path)
+                            root_path=self.__search_path_results)
 
                     else:
                         scroll_top()
@@ -398,7 +399,7 @@ class SearchAlign:
                     if counts:
                         self.__path_stats = mono_matches.write_monolingual_stats(
                             lang=str(self.__mono_lang).strip(),
-                            root_path=self.__search_path)
+                            root_path=self.__search_path_results)
                     else:
                         scroll_top()
                         self.__no_matches()
@@ -416,10 +417,10 @@ class SearchAlign:
                     if len(matches) > 0:
                         self.__path_qual = bil_context.write_context_qual_bil(
                             l1=str(self.__search_src).strip(), l2=str(self.__search_trg).strip(),
-                            root_path=self.__search_path)
+                            root_path=self.__search_path_results)
                         self.__path_quant = bil_context.write_context_quant_bil(
                             l1=str(self.__search_src).strip(), l2=str(self.__search_trg).strip(),
-                            root_path=self.__search_path)
+                            root_path=self.__search_path_results)
                     else:
                         scroll_top()
                         self.__no_matches()
@@ -434,7 +435,7 @@ class SearchAlign:
                         self.__path_stats = bil_matches.write_bilingual_stats(
                             l1=str(self.__search_src).strip(),
                             l2=str(self.__search_trg).strip(),
-                            root_path=self.__search_path)
+                            root_path=self.__search_path_results)
                     else:
                         scroll_top()
                         self.__no_matches()
@@ -452,9 +453,6 @@ class SearchAlign:
                 self.__message_file_creation_stats(path=self.__path_stats)
             elif self.__context:
                 self.__message_file_creation_context(path_qual=self.__path_qual, path_quant=self.__path_quant)
-
-
-
 
     @staticmethod
     def __assign_paths_harddrive(st, source_files=True):
