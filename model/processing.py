@@ -287,7 +287,7 @@ class Processing:
 
         for index, item in enumerate(text_list):
             # only append if match has been found
-            if re.search(regex, item):
+            if re.search(regex, item, re.IGNORECASE):
                 matches.append(item.strip("\n"))
                 matches_index.append(index)
                 # Search to the left for entries starting with '#'
