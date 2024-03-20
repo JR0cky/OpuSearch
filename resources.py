@@ -138,7 +138,6 @@ def app_appear():
     show_pages_from_config()
     with st.sidebar:
         st.sidebar.markdown("<br>", unsafe_allow_html=True)
-        st.sidebar.markdown("<br>", unsafe_allow_html=True)
         st.markdown("This tool was developed by Johanna Rockstroh and Jan Fliessbach and is licensed "
                     "under the MIT License. Its use is based on "
                     "[OPUS](https://opus.nlpl.eu/) "
@@ -152,8 +151,12 @@ def app_appear():
                     ' as this may cause the application to crash.</span>', unsafe_allow_html=True)
 
 
-
-
 def edit_design():
     hide_streamlit_content()
     app_appear()
+
+
+def info_external_hard_drive(st):
+    st.page_link("pages/external_drive.py", icon="💾", label="Store the search results on an external hard drive")
+
+
