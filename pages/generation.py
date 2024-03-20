@@ -5,21 +5,21 @@ import sys
 import streamlit as st
 import pandas as pd
 from io import StringIO
+from pathlib import Path
 from streamlit_extras.add_vertical_space import add_vertical_space
 from resources import edit_design, rename_files
 
 st.set_page_config(page_title="Data generation", page_icon="⚙️", layout="centered")
 
-# TODO edit path logic to handle external paths for generated and source files
 
 class GenAlign:
     def __init__(self):
         # path variables for subscript
         self.__script_path = None
         self.__src_path = None
+        self.__gen_path = None
         # path variable for language pairs
         self.__lang_path = None
-        self.__gen_path = None
         # capture whether parsed file should be generated
         # (adapt choice of languages accordingly)
         self.__parse_gen_file = None
@@ -34,9 +34,9 @@ class GenAlign:
         # source_files language for generation
         self.__lang_trg = st.session_state.src if "trg" in st.session_state else None
         # path variable for source files on external hard drive
-        self.__src_path_hard = st.session_state.src_path_hard if "src_path_hard" in st.session_state else None
+        self.__src_path_hard = st.session_state["src_path_hard"] if "src_path_hard" in st.session_state else None
         # path variable for generated files on external hard drive
-        self.__gen_path_hard = st.session_state.gen_path_hard if "gen_path_hard" in st.session_state else None
+        self.__gen_path_hard = st.session_state["gen_path_hard"] if "gen_path_hard" in st.session_state else None
         # limit for number of alignments to be generated
         self.__limit = st.session_state.limit if 'limit' in st.session_state \
             else None
@@ -61,12 +61,12 @@ class GenAlign:
         # Cut off the last directory of the current directoryif
         parent_directory = os.path.dirname(current_directory)
         # Construct the paths relative to the parent directory
-        self.__script_path = os.path.join(parent_directory, "model", "get_alignments.py")
+        self.__script_path = Path(os.path.join(parent_directory, "model", "get_alignments.py")).as_posix()
         if self.__src_path_hard is None:
-            self.__src_path = os.path.join(parent_directory, "data", "source_files")
+            self.__src_path = Path(os.path.join(parent_directory, "data", "source_files")).as_posix()
         if self.__gen_path_hard is None:
-            self.__gen_path = os.path.join(parent_directory, "data", "generated")
-        self.__lang_path = os.path.join(parent_directory, "data", "language_pairs")
+            self.__gen_path = Path(os.path.join(parent_directory, "data", "generated")).as_posix()
+        self.__lang_path = Path(os.path.join(parent_directory, "data", "language_pairs")).as_posix()
 
     def __handle_languages(self):
         # csv for languages with parse option
@@ -123,15 +123,29 @@ class GenAlign:
         self.__lang_src = st.session_state.src
         self.__lang_trg = st.session_state.trg
         self.__limit = st.session_state.limit
+        try:
+            self.__gen_path_hard = st.session_state["gen_path_hard"]
+            self.__src_path_hard = st.session_state["src_path_hard"]
+        except KeyError:
+            pass
         self.__lang_to_val(self.__lang_src, self.__lang_trg, lang_to_code=True)
-        self.__gen_path_file = (os.path.join(self.__gen_path, f"alignments_{self.__code_src}"
-                                                              f"_{self.__code_trg}_{self.__limit}_parsed.txt")
-                                if self.__parse_gen
-                                else os.path.join(self.__gen_path, f"alignments_{self.__code_src}"
-                                                                   f"_{self.__code_trg}_{self.__limit}_normal.txt"))
+        # check if path to external hard drive has been given
+        if self.__gen_path_hard is not None:
+            self.__gen_path = self.__gen_path_hard
+        if self.__parse_gen:
+            self.__gen_path_file = Path(os.path.join(self.__gen_path, f"alignments_{self.__code_src}" +
+                                                     f"_{self.__code_trg}_{self.__limit}_parsed.txt")).as_posix()
+        else:
+            self.__gen_path_file = Path(os.path.join(self.__gen_path, f"alignments_{self.__code_src}" +
+                                                     f"_{self.__code_trg}_" +
+                                                     f"{self.__limit}_normal.txt")).as_posix()
+        if self.__src_path_hard is not None:
+            self.__src_path = self.__src_path_hard
         # Call __run_command_check_download with the determined paths
         self.__run_command_check_download(sys.executable,
                                           self.__script_path,
+                                          self.__src_path,
+                                          self.__gen_path,
                                           self.__code_src,
                                           self.__code_trg,
                                           str(self.__limit),
@@ -227,45 +241,6 @@ class GenAlign:
                     """
         st.markdown(styled, unsafe_allow_html=True)
 
-    # def __run_command_check_download(self, *cmd_with_args):
-    #     st.write(cmd_with_args)
-    #     timeout = 20
-    #     with st.spinner(self.__generate_text):
-    #         try:
-    #             # Start the subprocess
-    #             with subprocess.Popen(cmd_with_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-    #                                   text=True) as checker:
-    #                 try:
-    #                     # Capture stdout and stderr, and wait for completion (with timeout)
-    #                     output, _ = checker.communicate(timeout=timeout)
-    #                 except subprocess.TimeoutExpired:
-    #                     # If timeout occurs, terminate the subprocess and capture remaining output
-    #                     checker.terminate()
-    #                     output, _ = checker.communicate()
-    #
-    #                 # Split the output into lines
-    #                 self.__gen_prompt = output.split("\n")
-    #
-    #                 # Log subprocess output
-    #                 st.text(f'Subprocess output: {output}')
-    #
-    #                 # Check if "downloading" is found in any line of output
-    #                 downloading_found = any("downloading" in line for line in self.__gen_prompt)
-    #
-    #                 if downloading_found:
-    #                     # If "downloading" is found, display download info
-    #                     self.__display_download_info()
-    #                 else:
-    #                     # If "downloading" is not found, proceed with message, file creation stats, and reload
-    #                     time.sleep(5)
-    #                     self.__message_generation()
-    #                     time.sleep(10)
-    #                     streamlit_js_eval(js_expressions="parent.window.location.reload()", key="1")
-    #
-    #         except Exception as e:
-    #             # Handle any exceptions that occur during subprocess execution
-    #             st.error(f"Error occurred during subprocess execution: {e}")
-
     def __run_command_check_download(self, *cmd_with_args):
         with st.spinner(self.__generate_text):
             try:
@@ -306,6 +281,8 @@ class GenAlign:
             with st.spinner(self.__download_text):
                 subprocess.run([sys.executable,
                                 self.__script_path,
+                                self.__src_path,
+                                self.__gen_path,
                                 self.__code_src,
                                 self.__code_trg,
                                 str(self.__limit),
@@ -398,7 +375,7 @@ class GenAlign:
                  hard drive. Choose your preferred location of the source files and/or the 
                  generated aligments. </div> """,
             unsafe_allow_html=True)
-        add_vertical_space(1)
+        add_vertical_space(3)
         col1, col2 = st.columns(2)
         with col1:
             st.button("Get External Path for Source Files",
@@ -408,7 +385,8 @@ class GenAlign:
                       on_click=lambda: self.__assign_paths_harddrive(source_files=False))
         add_vertical_space(2)
 
-    def __assign_paths_harddrive(self, source_files=True):
+    @staticmethod
+    def __assign_paths_harddrive(source_files=True):
         path = os.path.dirname(os.path.abspath(__file__))
         p = subprocess.Popen([sys.executable, "tkinter_file_dialog.py"], cwd=path,
                              stdin=subprocess.PIPE, stdout=subprocess.PIPE,
@@ -426,11 +404,9 @@ class GenAlign:
         with open(file_path, "r", encoding="utf-8") as file_in:
             folder_path = file_in.read().strip()
         if source_files:
-            self.__src_path_hard = folder_path
-            st.write("File Path:", self.__src_path_hard)
+            st.session_state["src_path_hard"] = Path(os.path.abspath(folder_path)).as_posix()
         else:
-            self.__gen_path_hard = folder_path
-            st.write("File Path:", self.__gen_path_hard)
+            st.session_state["gen_path_hard"] = Path(os.path.abspath(folder_path)).as_posix()
 
     def build(self):
         rename_files()
