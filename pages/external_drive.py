@@ -13,13 +13,15 @@ st.set_page_config(page_title="External Hard Drive", page_icon="💾️", layout
 def intro():
     st.title("How to use your external hard drive", anchor=False)
     st.markdown("If you specify the path to your external hard drive, "
-                " OpuSearch will automatically replicate the following folders found in data:", unsafe_allow_html=True)
+                " OpuSearch will automatically replicate the following folders under *OpuSearch/data*:",
+                unsafe_allow_html=True)
     st.markdown("* source_files", unsafe_allow_html=True)
     st.markdown("* generated", unsafe_allow_html=True)
     st.markdown("* search_results", unsafe_allow_html=True)
     add_vertical_space(1)
-    st.markdown("After downloading the source files, they will be automatically saved in source_files."
-                "The same goes for the generated files and the search results respectively."
+    st.markdown("After downloading the corpus files (one for each language and one for the mappings),"
+                " they will be automatically saved under *source_files*."
+                " The same goes for the generated files and the search results respectively."
                 "If you download the corpus files manually,"
                 " make sure to put them under *source_files*.", unsafe_allow_html=True)
     st.markdown("**Attention**: If you refresh the page, "
