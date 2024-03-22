@@ -1,5 +1,6 @@
 import os
 import re
+import toml
 import pandas as pd
 import streamlit as st
 from st_pages import show_pages_from_config
@@ -116,9 +117,10 @@ def app_appear():
     #     </style>
     #     """,
     #     unsafe_allow_html=True)
-    footer_html = """
+    primaryColor = toml.load(".streamlit/config.toml")['theme']['primaryColor']
+    footer_html = f"""
         <style>
-            .footer {
+            .footer {{
                 position: fixed;
                 left: 0;
                 bottom: 0;
@@ -126,7 +128,9 @@ def app_appear():
                 color: white;
                 text-align: right;
                 padding: 10px 50px 10px 0;
-            }
+            }}
+            div.stButton > button:first-child {{
+             border: 3px solid {primaryColor}; border-radius:20px 20px 20px 20px; }}
         </style>
         <div class="footer">
             <p>Made with Streamlit</p>

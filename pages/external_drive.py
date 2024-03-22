@@ -19,17 +19,19 @@ def intro():
     st.markdown("* generated", unsafe_allow_html=True)
     st.markdown("* search_results", unsafe_allow_html=True)
     add_vertical_space(1)
+    st.markdown("**Press the button below to navigate to the directory,"
+                " in which you want to save your project's data:**"
+                , unsafe_allow_html=True)
+    st.button("Choose Directory", on_click=assign_paths_harddrive)
+    add_vertical_space(1)
     st.markdown("After downloading the corpus files (one for each language and one for the mappings),"
                 " they will be automatically saved under *source_files*."
-                " The same goes for the generated files and the search results respectively."
+                " The same goes for the generated files and the search results respectively. "
                 "If you download the corpus files manually,"
                 " make sure to put them under *source_files*.", unsafe_allow_html=True)
     st.markdown("**Attention**: If you refresh the page, "
                 "the folders of the local project's directory will be taken as default."
                 , unsafe_allow_html=True)
-    st.markdown("Press the button below to navigate to the directory, in which you want to save your project's data:"
-                , unsafe_allow_html=True)
-    st.button("Choose Directory", on_click=assign_paths_harddrive)
 
 
 def assign_paths_harddrive():
@@ -92,6 +94,7 @@ def message_generation(paths):
 def build():
     edit_design()
     intro()
+
 
 if __name__ == "__main__":
     build()

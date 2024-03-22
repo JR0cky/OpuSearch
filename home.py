@@ -114,7 +114,6 @@ def show_intro():
                     unsafe_allow_html=True)
 
 
-
 def main():
     rename_files()
     edit_design()
