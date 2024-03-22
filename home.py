@@ -108,7 +108,7 @@ def show_intro():
                     " searching for the ID.", unsafe_allow_html=True)
     add_vertical_space(1)
     with st.expander("**Can I use an external hard drive for storing the data?**"):
-        st.markdown("Yes it is possible to store the source files, the generated alignments and your search results "
+        st.markdown("Yes, it is possible to store the corpus files, the generated alignments and your search results "
                     "on an external hard drive of your choice. "
                     "For more information go to the page *Use External Hard Drive*.",
                     unsafe_allow_html=True)
