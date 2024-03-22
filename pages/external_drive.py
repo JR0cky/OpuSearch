@@ -19,8 +19,11 @@ def intro():
     st.markdown("* generated", unsafe_allow_html=True)
     st.markdown("* search_results", unsafe_allow_html=True)
     add_vertical_space(1)
-    st.markdown("**Press the button below to navigate to the directory,"
-                " in which you want to save your project's data:**"
+    st.markdown("**Remark**: You may want to create an extra folder where these directories will be stored in.",
+                unsafe_allow_html=True)
+    add_vertical_space(1)
+    st.markdown("Press the button below to navigate to the directory,"
+                " in which you want to save your project's data:"
                 , unsafe_allow_html=True)
     st.button("Choose Directory", on_click=assign_paths_harddrive)
     add_vertical_space(1)
