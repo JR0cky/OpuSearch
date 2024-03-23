@@ -2,10 +2,12 @@ from model.processing import Preprocessing, Processing
 import pandas as pd
 
 
+# TODO find out why less individual occurrences in stats than in context
 class BilingualContext:
     """Get context of each match in source_files and target language
 
     """
+
     def __init__(self, path, regex, pre_context=None, post_context=None,
                  anno=True):
         self.__segments_l2_qual = None
@@ -226,7 +228,7 @@ class BilingualContext:
                     f"{chr(10).join(pre_con_src)}\n"
                     f"{chr(10).join(match_src)}\n"
                     f"{chr(10).join(post_con_src)}\n\n"
-                    
+
                     f"{chr(10).join(pre_con_trg)}\n"
                     f"{chr(10).join(match_trg)}\n"
                     f"{chr(10).join(post_con_trg)}\n\n"
@@ -304,9 +306,8 @@ class BilingualContext:
 
 
 if __name__ == "__main__":
-    context = BilingualContext(
-        path="../data/generated/alignments_fr_es_5000_parsed.txt",
-        regex=r"Comme", pre_context=4, post_context=5, anno=True)
+    context = BilingualContext(path="../data/generated/alignments_fr_es_500_parsed.txt",
+                               regex=r"Comment", pre_context=4, post_context=5, anno=True)
 
     context.write_context_quant_bil(l1="French", l2="Spanish",
                                     root_path="../data/search_results/")

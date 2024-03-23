@@ -325,6 +325,8 @@ class SearchAlign:
                                           self.__generated, key="search_file")
         # extract path from file
         self.__search_path = Path(os.path.join(self.__gen_path, self.__search_file)).as_posix()
+        st.write(self.__search_file)
+        st.write(self.__search_path)
         if self.__search_file != "-":
             self.__parse_file_name()
             self.__lang_to_val(self.__search_src, self.__search_trg,
@@ -375,6 +377,7 @@ class SearchAlign:
     def __call_search_func(self):
         scroll_top()
         with st.spinner(self.__search_text):
+            st.write("in search funct")
             parse_param = False if self.__parse_search == "normal" else True
             if not self.__stats and not self.__context:
                 self.__no_selection()
