@@ -79,14 +79,14 @@ def scroll_top():
 
 
 def app_appear():
-    # custom = """
-    # <style>
-    # header {visibility: hidden;}
-    # div[data-testid="stAppViewContainer"] {
-    #         background: linear-gradient(148deg, rgba(72,165,189,1) 22%, rgba(15,66,173,1) 53%);
-    # </style>
-    # """
-    # st.markdown(custom, unsafe_allow_html=True)
+    custom = """
+    <style>
+    header {visibility: hidden;}
+    div[data-testid="stAppViewContainer"] {
+            background: linear-gradient(86deg, rgba(20,45,160,1) 54%, rgba(35,117,174,1) 98%);
+    </style>
+    """
+    st.markdown(custom, unsafe_allow_html=True)
     # # linear-gradient(-32deg, rgba(243, 239, 228, 1) 15%, rgba(138, 212, 209, 1) 68%)
     # st.markdown(
     #     """ <style>
