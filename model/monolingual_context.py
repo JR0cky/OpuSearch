@@ -29,6 +29,7 @@ class MonolingualContext:
                 self.__regex,
                 stats=False,
                 mono=True,
+                unparsed_stats_context=False,
                 mono_pattern=self.__current_pattern_ID,
                 caseinsensitive=self.__caseinsensitive
             )
@@ -84,8 +85,7 @@ class MonolingualContext:
         """
         self.__post_context_list = [
             self.__text_list_only[index + 1: index + 1 + self.__post_context]
-            for
-            index in self.__indices]
+            for index in self.__indices]
         self.__post_context_list = [
             [item for item in sublist if not item.startswith("#")]
             for sublist in self.__post_context_list
@@ -173,8 +173,8 @@ class MonolingualContext:
 if __name__ == "__main__":
     context = MonolingualContext(
         path="../data/generated/alignments_fr_es_500_parsed.txt",
-        regex=r"Que.*", pre_context=4, post_context=5,
-        anno=True, src=True)
+        regex=r"Comment", pre_context=2, post_context=2,
+        anno=True, src=True, caseinsensitive=True)
     context.write_context_quant_mono(lang="French",
                                      root_path="../data/search_results/")
     context.write_context_qual_mono(lang="French",

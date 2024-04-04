@@ -313,6 +313,8 @@ class Processing:
         file_pattern = re.compile(r'^# [a-z]{2}/\d+/\d+/\d+\.xml\.gz$')
         # monolingual mode
         if mono:
+            text_list_mono = [s for s in text_list if
+                              pattern.match(s) or file_pattern.match(s)]
             matches, indices, files = Processing.get_matches_index_files(
                 text_list, regex, pattern, caseinsensitive=caseinsensitive)
             # monolingual statistics unparsed
@@ -327,8 +329,8 @@ class Processing:
                 return parsed_dict, matches, files
             else:
                 # mono mode without stats (context)
-                text_list_mono = [s for s in text_list if
-                                  pattern.match(s) or file_pattern.match(s)]
+                matches, indices, files = Processing.get_matches_index_files(
+                    text_list_mono, regex, pattern, caseinsensitive=caseinsensitive)
                 return text_list_mono, matches, indices, files
         else:
             # Bilingual mode

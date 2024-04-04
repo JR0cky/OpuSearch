@@ -4,10 +4,12 @@ from collections import defaultdict
 from model.processing import Processing
 
 
+# TODO check counts of results for monolingual context and stats
 class MonolingualStats:
     """Get monolingual matches from corresponding regex and
        write them to a csv-file
     """
+
     def __init__(self, path, regex, src=True, parsed=False, caseinsensitive=False):
         self.__path = path
         self.__regex = regex
@@ -24,7 +26,7 @@ class MonolingualStats:
             self.__current_pattern_ID = self.__trg_pattern
         # other routine for unparsed data
         if not self.__parsed:
-            self.__matches,  self.__files = \
+            self.__matches, self.__files = \
                 Processing.perform_new_search(
                     self.__path,
                     self.__regex,
@@ -189,14 +191,14 @@ class MonolingualStats:
 
 if __name__ == "__main__":
     mono_matches = MonolingualStats(
-        path="../data/generated/alignments_fr_es_10_parsed.txt",
-        regex=r"de",
-        src=False,
-        parsed=True
+        path="../data/generated/alignments_fr_es_500_parsed.txt",
+        regex=r"Comment",
+        src=True,
+        parsed=True,
+        caseinsensitive=True
     )
     counts = mono_matches.get_counts()
     if counts:
-        mono_matches.write_monolingual_stats(lang="French", root_path=
-        "../data/search_results/")
+        mono_matches.write_monolingual_stats(lang="French", root_path="../data/search_results/")
     else:
         print("no results")
