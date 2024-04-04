@@ -10,6 +10,7 @@ from streamlit_extras.add_vertical_space import add_vertical_space
 from resources import edit_design, rename_files, info_external_hard_drive
 
 # TODO fix error alignment file could not be created or is empty for existing files
+
 st.set_page_config(page_title="Data generation", page_icon="⚙️", layout="centered")
 
 

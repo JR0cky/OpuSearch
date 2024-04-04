@@ -33,7 +33,9 @@ def intro():
                 "If you download the corpus files manually,"
                 " make sure to put them under *source_files*.", unsafe_allow_html=True)
     st.markdown("**Attention**: If you refresh the page, "
-                "the folders of the local project's directory will be taken as default."
+                "the folders of the local project's directory will be taken as default. If you want to either "
+                "only *generate* or *search through* the alignments using your external hard drive, you will have "
+                "to copy the necessary files into the respective directories."
                 , unsafe_allow_html=True)
 
 

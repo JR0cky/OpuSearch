@@ -59,6 +59,11 @@ def show_intro():
         content += "| <span style='font-size: 13px'>Regular Expression</span> | <span style='font-size: 13px'>set by " \
                    "user</span> | <span style='font-size: 13px'>Specifies the Regular Expression for the search. " \
                    "This value is obligatory.</span> | <span style='font-size: 13px'>All Option Types</span> |\n"
+        content += "| <span style='font-size: 13px'>Ignore Case</span> | " \
+                   "<span style='font-size: 13px'>set by " \
+                   "user</span> | <span style='font-size: 13px'>If selected, the Regular Expression will be applied " \
+                   "in upper and lower case without further specification. " \
+                   "</span> | <span style='font-size: 13px'>All Option Types</span> |\n"
         content += "| <span style='font-size: 13px'>Language Mode</span> | <span style='font-size: 13px'>bilingual / " \
                    "monolingual</span> | <span style='font-size: 13px'>Specifies the language mode. If " \
                    "monolingual is selected the language has to be specified. " \

@@ -318,8 +318,8 @@ class SearchAlign:
                         padding: 10px;
                         border-radius: 5px;
                          color: black;">
-                        <b>Attention: </b>For the bilingual search you can only apply the search term for 
-                        the source language. For all cases you can use case-insensitive search.
+                        <b>Attention: </b>For the bilingual search you can only search through
+                        the source language.
                         </div> """,
             unsafe_allow_html=True)
         add_vertical_space(2)
@@ -328,8 +328,6 @@ class SearchAlign:
                                           self.__generated, key="search_file")
         # extract path from file
         self.__search_path = Path(os.path.join(self.__gen_path, self.__search_file)).as_posix()
-        st.write(self.__search_file)
-        st.write(self.__search_path)
         if self.__search_file != "-":
             self.__parse_file_name()
             self.__lang_to_val(self.__search_src, self.__search_trg,
