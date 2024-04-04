@@ -1,23 +1,27 @@
-from model.processing import Preprocessing, Processing
+from model.processing import Processing
 import pandas as pd
 
 
-# TODO find out why less individual occurrences in stats than in context
 class BilingualContext:
     """Get context of each match in source_files and target language
 
     """
-
     def __init__(self, path, regex, pre_context=None, post_context=None,
-                 anno=True):
+                 anno=True, caseinsensitive=False):
         self.__segments_l2_qual = None
         self.__segments_l1_qual = None
         self.__path = path
         self.__regex = regex
-        self.__text_list = Preprocessing(self.__path).get_text_list()
-        self.__matches, self.__indices, self.__files = Processing.get_matches_index_files(
-            self.__text_list,
-            self.__regex)
+        self.__caseinsensitive = caseinsensitive
+        self.__src_pattern = r'\(src\)="[0-9]+">'
+        self.__text_list, self.__matches, self.__indices, self.__files = Processing.perform_new_search(
+                    self.__path,
+                    self.__regex,
+                    stats=False,
+                    unparsed_stats_context=True,
+                    mono_pattern=self.__src_pattern,
+                    mono=False,
+                    caseinsensitive=self.__caseinsensitive)
         self.__segments_l1 = None
         self.__l1 = None
         self.__l2 = None
@@ -307,7 +311,7 @@ class BilingualContext:
 
 if __name__ == "__main__":
     context = BilingualContext(path="../data/generated/alignments_fr_es_500_parsed.txt",
-                               regex=r"Comment", pre_context=4, post_context=5, anno=True)
+                               regex=r"Comment", pre_context=2, post_context=2, anno=True, caseinsensitive=True)
 
     context.write_context_quant_bil(l1="French", l2="Spanish",
                                     root_path="../data/search_results/")

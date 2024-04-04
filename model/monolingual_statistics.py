@@ -1,21 +1,21 @@
 import re
 import pandas as pd
 from collections import defaultdict
-from model.processing import Processing, Preprocessing
+from model.processing import Processing
 
 
 class MonolingualStats:
     """Get monolingual matches from corresponding regex and
        write them to a csv-file
     """
-
-    def __init__(self, path, regex, src=True, parsed=False):
+    def __init__(self, path, regex, src=True, parsed=False, caseinsensitive=False):
         self.__path = path
         self.__regex = regex
         self.__src_pattern = r'\(src\)="[0-9]+">'
         self.__trg_pattern = r'\(trg\)="[0-9]+">'
         self.__src = src
         self.__parsed = parsed
+        self.__caseinsensitive = caseinsensitive
         if self.__src:
             # set src pattern to search ID in alignments' values
             self.__current_pattern_ID = self.__src_pattern
@@ -29,9 +29,11 @@ class MonolingualStats:
                     self.__path,
                     self.__regex,
                     stats=False,
-                    unparsed_stats=True,
+                    unparsed_stats_context=True,
                     mono=True,
-                    mono_pattern=self.__current_pattern_ID)
+                    mono_pattern=self.__current_pattern_ID,
+                    caseinsensitive=self.__caseinsensitive
+                )
             self.__process_counts_unparsed()
         else:
             self.__POS = []
@@ -46,7 +48,9 @@ class MonolingualStats:
                     self.__regex,
                     stats=True,
                     mono=True,
-                    mono_pattern=self.__current_pattern_ID)
+                    mono_pattern=self.__current_pattern_ID,
+                    caseinsensitive=self.__caseinsensitive
+                )
             # run processing for monolingual matches
             self.__process_counts()
 

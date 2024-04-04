@@ -277,17 +277,16 @@ class Processing:
     """
 
     @staticmethod
-    def get_matches_index_files(text_list, regex):
+    def get_matches_index_files(text_list, regex, src_pattern, caseinsensitive=False):
         """Extract matches, corresponding files, and their indices in text list
         @return:
         """
         matches = []
         files = []
         matches_index = []
-
         for index, item in enumerate(text_list):
             # only append if match has been found
-            if re.search(regex, item, re.IGNORECASE):
+            if re.search(regex, item, flags=re.IGNORECASE if caseinsensitive else 0) and src_pattern.match(item):
                 matches.append(item.strip("\n"))
                 matches_index.append(index)
                 # Search to the left for entries starting with '#'
@@ -305,22 +304,21 @@ class Processing:
         return matches, matches_index, files
 
     @staticmethod
-    def perform_new_search(path, regex, stats=True, mono=False, unparsed_stats=False,
-                           mono_pattern=None):
+    def perform_new_search(path, regex, stats=True, mono=False, unparsed_stats_context=False,
+                           mono_pattern=None, caseinsensitive=False):
+        # get text list
         text_list = Preprocessing(path).get_text_list()
-
-        # filter language
+        # compile patterns for src and files
+        pattern = re.compile(mono_pattern)
+        file_pattern = re.compile(r'^# [a-z]{2}/\d+/\d+/\d+\.xml\.gz$')
+        # monolingual mode
         if mono:
-            pattern = re.compile(mono_pattern)
-            file_pattern = re.compile(r'^# [a-z]{2}/\d+/\d+/\d+\.xml\.gz$')
-            text_list_mono = [s for s in text_list if
-                              pattern.match(s) or file_pattern.match(s)]
             matches, indices, files = Processing.get_matches_index_files(
-                text_list, regex)
-
-            if unparsed_stats:
+                text_list, regex, pattern, caseinsensitive=caseinsensitive)
+            # monolingual statistics unparsed
+            if unparsed_stats_context:
                 return matches, files
-
+            # monolingual statistics parsed
             if stats:
                 # monolingual mode with stats, process and return dictionary
                 parsed_dict = PreprocessingParsed(path, files, indices,
@@ -328,27 +326,24 @@ class Processing:
                                                   ).get_dictionary()
                 return parsed_dict, matches, files
             else:
-                # mono mode without stats (context), return matches, indices and files
-                matches, indices, files = Processing.get_matches_index_files(
-                    text_list_mono, regex)
+                # mono mode without stats (context)
+                text_list_mono = [s for s in text_list if
+                                  pattern.match(s) or file_pattern.match(s)]
                 return text_list_mono, matches, indices, files
         else:
             # Bilingual mode
             matches_l1, indices, files = Processing.get_matches_index_files(
-                text_list, regex)
-            if unparsed_stats:
+                text_list, regex, pattern, caseinsensitive=caseinsensitive)
+            # unparsed bilingual statistics and context
+            if unparsed_stats_context:
                 return text_list, matches_l1, indices, files
-
+            # parsed bilingual statistics
             if stats:
                 # For bilingual mode with stats process and return dictionary
                 parsed_dict = PreprocessingParsed(path,
                                                   files,
                                                   indices).get_dictionary()
                 return parsed_dict, matches_l1, files
-            else:
-                # bilingual mode without stats return matches, indices and
-                # files
-                return text_list, matches_l1, indices, files
 
     @staticmethod
     def remove_annotation(data, nested=True):

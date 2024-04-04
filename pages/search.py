@@ -41,6 +41,9 @@ class SearchAlign:
         # regular expression entered (user)
         self.__regex = st.session_state.regex \
             if 'regex' in st.session_state else None
+        # ignore case for regular expression (user)
+        self.__ignore_case = st.session_state["ignore_case"] \
+            if "ignore_case" in st.session_state else None
         # selected file to search through (user)
         self.__search_file = st.session_state.search_file \
             if 'search_file' in st.session_state else None
@@ -349,7 +352,11 @@ class SearchAlign:
                 add_vertical_space(2)
                 st.markdown(f"**File Format:**", unsafe_allow_html=True)
                 st.markdown(f"{self.__parse_search}", unsafe_allow_html=True)
-            st.text_input("Regular Expression for Searching the Data", key="regex")
+            col5, col6 = st.columns(2)
+            with col5:
+                st.text_input("Regular Expression for Searching the Data", key="regex")
+            with col6:
+                st.checkbox("Ignore Case for Regular Expression", key="ignore_case")
             st.write(self.__regex)
             if self.__regex is None:
                 self.__no_regex()
@@ -392,6 +399,7 @@ class SearchAlign:
                         post_context=self.__post_context,
                         anno=True if self.__anno else False,
                         src=mono_param,
+                        caseinsensitive=st.session_state["ignore_case"]
                     )
                     matches = mono_context.get_matches_context()
                     if len(matches) > 0:
@@ -410,7 +418,8 @@ class SearchAlign:
                     mono_matches = MonolingualStats(path=self.__search_path,
                                                     regex=self.__regex,
                                                     src=mono_param,
-                                                    parsed=parse_param
+                                                    parsed=parse_param,
+                                                    caseinsensitive=st.session_state["ignore_case"]
                                                     )
                     counts = mono_matches.get_counts()
                     if counts:
@@ -428,7 +437,8 @@ class SearchAlign:
                         regex=self.__regex,
                         pre_context=self.__pre_context,
                         post_context=self.__post_context,
-                        anno=self.__anno
+                        anno=self.__anno,
+                        caseinsensitive=st.session_state["ignore_case"]
                     )
                     matches = bil_context.get_matches_context()
                     if len(matches) > 0:
@@ -446,7 +456,8 @@ class SearchAlign:
                     src_aggr_param = True if self.__aggr_src else False
                     bil_matches = BilingualStats(path=self.__search_path,
                                                  regex=self.__regex, src_aggregate=src_aggr_param,
-                                                 parsed=parse_param)
+                                                 parsed=parse_param,
+                                                 caseinsensitive=st.session_state["ignore_case"])
                     counts = bil_matches.get_counts()
                     if counts:
                         self.__path_stats = bil_matches.write_bilingual_stats(

@@ -2,23 +2,22 @@ import ast
 import re
 import pandas as pd
 from collections import defaultdict
-from model.processing import Processing, Preprocessing
+from model.processing import Processing
 
-# TODO remove duplicates for alignments counts (match src match trg and alignment counts) in final stage (see comments)
 
 class BilingualStats:
     """Get bilingual matches from corresponding regex and
        write them with their translations to a csv-file
 
     """
-    def __init__(self, path, regex, parsed=False, src_aggregate=False):
+    def __init__(self, path, regex, parsed=False, src_aggregate=False, caseinsensitive=False):
         self.__path = path
         self.__regex = regex
         self.__parsed = parsed
         self.__src_aggregate = src_aggregate
         self.__src_pattern = r'\(src\)="[0-9]+">'
         self.__trg_pattern = r'\(trg\)="[0-9]+">'
-        self.__current_pattern_ID = self.__src_pattern + self.__regex
+        self.__caseinsensitive = caseinsensitive
         self.__matches_src_all = []
         self.__matches_clean = []
         self.__sets_files = []
@@ -30,15 +29,22 @@ class BilingualStats:
                     self.__path,
                     self.__regex,
                     stats=False,
-                    unparsed_stats=True,
-                    mono=False)
+                    unparsed_stats_context=True,
+                    mono=False,
+                    mono_pattern=self.__src_pattern,
+                    caseinsensitive=self.__caseinsensitive
+                )
             self.__process_counts_unparsed()
         else:
             self.__parsed_dict, self.__matches_l1, self.__files = \
                 Processing.perform_new_search(
                     self.__path,
-                    self.__current_pattern_ID,
-                    stats=True
+                    self.__regex,
+                    stats=True,
+                    unparsed_stats_context=False,
+                    mono=False,
+                    mono_pattern=self.__src_pattern,
+                    caseinsensitive=self.__caseinsensitive
                 )
             # extract matches, translations and metadata
             self.__process_counts()
@@ -372,6 +378,6 @@ class BilingualStats:
 
 if __name__ == "__main__":
     bilingual = BilingualStats(path="../data/generated/alignments_fr_es_500_parsed.txt",
-                               regex=r'Comment', src_aggregate=False, parsed=True)
+                               regex=r'Comment', src_aggregate=False, parsed=True, caseinsensitive=True)
     bilingual.write_bilingual_stats(l1="French", l2="Spanish",
                                     root_path="../data/search_results/")

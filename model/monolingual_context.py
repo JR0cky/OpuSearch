@@ -6,13 +6,13 @@ class MonolingualContext:
     """Get context of each match in source_files language
 
     """
-
     def __init__(self, path, regex, pre_context=None, post_context=None,
-                 anno=True, src=True
+                 anno=True, src=True, caseinsensitive=False
                  ):
         self.__path = path
         self.__regex = regex
         self.__src = src
+        self.__caseinsensitive = caseinsensitive
         self.__src_pattern = r'\(src\)="[0-9]+">'
         self.__trg_pattern = r'\(trg\)="[0-9]+">'
         # option to either filter for src or trg only
@@ -29,7 +29,9 @@ class MonolingualContext:
                 self.__regex,
                 stats=False,
                 mono=True,
-                mono_pattern=self.__current_pattern_ID)
+                mono_pattern=self.__current_pattern_ID,
+                caseinsensitive=self.__caseinsensitive
+            )
         self.__text_list_only = [elem for elem in self.__text_list
                                  if not elem.startswith("=")]
         self.__pre_context = pre_context
