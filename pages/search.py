@@ -14,12 +14,10 @@ from streamlit_extras.add_vertical_space import add_vertical_space
 
 st.set_page_config(page_title="Search Data", page_icon="🔎", layout="centered")
 
-# TODO check functionality of search and model for search again! (see overview of options)
+
 # TODO catch IndexError for bilingual context, happens when "e" is searched in basque
 # TODO catch 'error: global flags not at the start of the expression at position 17' (Regex, wait for reproduction)
 # TODO handle mystery languages (normal mode)
-# TODO disclaimer for search results in source_files for wrong language resulting from alignments (for all search modes), e.g. "Que"
-
 
 class SearchAlign:
     def __init__(self):
@@ -386,7 +384,6 @@ class SearchAlign:
     def __call_search_func(self):
         scroll_top()
         with st.spinner(self.__search_text):
-            st.write("in search funct")
             parse_param = False if self.__parse_search == "normal" else True
             if not self.__stats and not self.__context:
                 self.__no_selection()

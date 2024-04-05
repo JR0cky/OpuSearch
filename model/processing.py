@@ -1,7 +1,5 @@
 import os.path
 import re
-from pathlib import Path
-
 import pandas as pd
 
 
@@ -523,7 +521,7 @@ class Processing:
             # make set to get unique file pairs
             files['File_Pairs'] = files['File_Pairs'].apply(lambda x: set(x))
             # get count of file pairs
-            files['File_count'] = files['File_Pairs'].apply(lambda x: len(x))
+            files['File_Count'] = files['File_Pairs'].apply(lambda x: len(x))
             # drop left over index column
             df.drop(["File_Pairs"], axis=1, inplace=True)
             df = pd.merge(df, files, on=[f'Match {l1}', f'Match {l2}'], how='left')
@@ -532,7 +530,7 @@ class Processing:
             matches = [elem for elem in counts_dict.keys()]
             # store results in dataframe (monolingual)
             df = pd.DataFrame(list(zip(matches, num, files, regex_list)),
-                              columns=[f'Match {l1}', "Number", "File_Pairs", "Regex"])
+                              columns=[f'Match {l1}', "Count_Match", "File_Pairs", "Regex"])
             # handle aggregation of files
             files = df.groupby(f'Match {l1}')['File_Pairs'].agg(list).reset_index()
             # flatten lists if necessary
@@ -540,7 +538,7 @@ class Processing:
             # make set to get unique file pairs
             files['File_Pairs'] = files['File_Pairs'].apply(lambda x: set(x))
             # get count of file pairs
-            files['File_count'] = files['File_Pairs'].apply(lambda x: len(x))
+            files['File_Count'] = files['File_Pairs'].apply(lambda x: len(x))
             # drop left over index column
             df.drop(["File_Pairs"], axis=1, inplace=True)
             df = pd.merge(df, files, on=[f'Match {l1}'], how='left')

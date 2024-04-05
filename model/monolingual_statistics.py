@@ -4,7 +4,6 @@ from collections import defaultdict
 from model.processing import Processing
 
 
-# TODO check counts of results for monolingual context and stats
 class MonolingualStats:
     """Get monolingual matches from corresponding regex and
        write them to a csv-file
@@ -177,6 +176,8 @@ class MonolingualStats:
             all_data = pd.merge(merged_df, files,
                                 on=[f'Match {lang}'],
                                 how='left')
+            # drop count for POS
+            all_data = all_data.drop(["Count_POS"], axis=1)
             # add column with Regex
             all_data['Regex'] = self.__regex
             # flatten lists
