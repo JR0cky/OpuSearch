@@ -130,7 +130,9 @@ def app_appear():
                 padding: 10px 50px 10px 0;
             }}
             div.stButton > button:first-child {{
-             border: 3px solid {primaryColor}; border-radius:20px 20px 20px 20px; }}
+                border: 3px solid {primaryColor};
+                border-radius: 20px;
+            }}
         </style>
         <div class="footer">
             <p>Made with Streamlit</p>

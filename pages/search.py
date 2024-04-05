@@ -43,7 +43,7 @@ class SearchAlign:
             if 'regex' in st.session_state else None
         # ignore case for regular expression (user)
         self.__ignore_case = st.session_state["ignore_case"] \
-            if "ignore_case" in st.session_state else None
+            if "ignore_case" in st.session_state else False
         # selected file to search through (user)
         self.__search_file = st.session_state.search_file \
             if 'search_file' in st.session_state else None
@@ -350,15 +350,19 @@ class SearchAlign:
                 add_vertical_space(2)
                 st.markdown(f"**File Format:**", unsafe_allow_html=True)
                 st.markdown(f"{self.__parse_search}", unsafe_allow_html=True)
+            add_vertical_space(2)
             col5, col6 = st.columns(2)
             with col5:
                 st.text_input("Regular Expression for Searching the Data", key="regex")
             with col6:
                 st.checkbox("Ignore Case for Regular Expression", key="ignore_case")
-            st.write(self.__regex)
             if self.__regex is None:
                 self.__no_regex()
-            else:
+                add_vertical_space(1)
+            if (self.__regex is None or len(self.__regex) <= 0) and self.__ignore_case is True:
+                self.__no_regex()
+                add_vertical_space(1)
+            if self.__regex is not None:
                 st.selectbox("Language Mode", ("bilingual", "monolingual"), key="lang_mode")
                 if self.__lang_mode == "monolingual":
                     # make user choose source_files or target language
