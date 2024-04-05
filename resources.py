@@ -160,7 +160,14 @@ def edit_design():
     app_appear()
 
 
-def info_external_hard_drive(st):
-    st.page_link("pages/external_drive.py", icon="💾", label="Store the search results on an external hard drive")
+def info_external_hard_drive(st, page=None):
+    if page == "search":
+        st.page_link("pages/external_drive.py", icon="💾", label="Store the search results on an external hard drive")
+    elif page == "generation":
+        st.page_link("pages/external_drive.py", icon="💾", label="Store the aligments and source files"
+                                                                " on an external hard drive")
+    elif page is None:
+        st.page_link("pages/external_drive.py", icon="💾", label="Use an external harddrive for your data.")
+
 
 

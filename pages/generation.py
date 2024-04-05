@@ -370,7 +370,7 @@ class GenAlign:
         edit_design()
         st.title("Generate Alignments", anchor=False)
         add_vertical_space(2)
-        info_external_hard_drive(st)
+        info_external_hard_drive(st, page="generation")
         add_vertical_space(2)
         self.__handle_paths()
         self.__handle_languages()

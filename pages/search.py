@@ -508,7 +508,7 @@ class SearchAlign:
         edit_design()
         st.title("Search Alignments", anchor=False)
         add_vertical_space(2)
-        info_external_hard_drive(st)
+        info_external_hard_drive(st, page="search")
         add_vertical_space(2)
         self.__handle_search()
 
