@@ -375,6 +375,10 @@ class GenAlign:
         self.__handle_paths()
         self.__handle_languages()
         self.__handle_generation()
+        add_vertical_space(2)
+        with st.expander("**A Note on Erroneous Alignments**"):
+            st.markdown("Add content here",
+                        unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
