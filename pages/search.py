@@ -316,7 +316,7 @@ class SearchAlign:
                         padding: 10px;
                         border-radius: 5px;
                          color: black;">
-                        <b>Attention: </b>For the bilingual search you can only search through
+                        <b>Please note: </b>For the bilingual search you can only search through
                         the source language.
                         </div> """,
             unsafe_allow_html=True)
@@ -351,15 +351,12 @@ class SearchAlign:
             add_vertical_space(2)
             col5, col6 = st.columns(2)
             with col5:
-                st.text_input("Regular Expression for Searching the Data", key="regex")
+                st.text_input("Regular Expression (Python) for Searching the Data", key="regex")
             with col6:
-                st.checkbox("Ignore Case for Regular Expression", key="ignore_case")
-            if self.__regex is None:
-                self.__no_regex()
-                add_vertical_space(1)
-            if (self.__regex is None or len(self.__regex) <= 0) and self.__ignore_case is True:
-                self.__no_regex()
-                add_vertical_space(1)
+                st.checkbox("Make Search Case-Insensitive", key="ignore_case")
+            add_vertical_space(1)
+            self.__no_regex()
+            add_vertical_space(1)
             if self.__regex is not None:
                 st.selectbox("Language Mode", ("bilingual", "monolingual"), key="lang_mode")
                 if self.__lang_mode == "monolingual":
