@@ -8,8 +8,6 @@ class BilingualContext:
     """
     def __init__(self, path, regex, pre_context=None, post_context=None,
                  anno=True, caseinsensitive=False):
-        self.__segments_l2_qual = None
-        self.__segments_l1_qual = None
         self.__path = path
         self.__regex = regex
         self.__caseinsensitive = caseinsensitive
@@ -173,13 +171,15 @@ class BilingualContext:
                                              self.__l2_dict)
         return first, last
 
-    def __set_pre_context(self, lst, indices, pre_context):
+    @staticmethod
+    def __set_pre_context(lst, indices, pre_context):
         pre_context_list = [
             lst[index - pre_context:index]
             for index in indices]
         return pre_context_list
 
-    def __set_post_context(self, lst, indices, post_context):
+    @staticmethod
+    def __set_post_context(lst, indices, post_context):
         post_context_list = [
             lst[index + 1: index + 1 + post_context]
             for index in indices]
@@ -208,24 +208,59 @@ class BilingualContext:
                 root_path=root_path
             )
         # add match marker to segments before combining lists
-        self.__segments_l1_qual = [
-            [str(match) + "\t<<<<<<<< MATCH" for match in segment]
-            for segment in self.__segments_l1]
-        self.__segments_l2_qual = [
-            [str(match) + "\t<<<<<<<< MATCH" for match in segment]
-            for segment in self.__segments_l2]
+        segments_l1_qual = [
+            tuple(str(match) + "\t<<<<<<<< MATCH" for match in segment)
+            for segment in self.__segments_l1
+        ]
+        segments_l2_qual = [
+            tuple(str(match) + "\t<<<<<<<< MATCH" for match in segment)
+            for segment in self.__segments_l2
+        ]
+        pre_context_list_src = [
+            tuple(str(match) for match in segment)
+            for segment in self.__pre_context_list_src
+        ]
+        post_context_list_src = [
+            tuple(str(match) for match in segment)
+            for segment in self.__post_context_list_src
+        ]
+        pre_context_list_trg = [
+            tuple(str(match) for match in segment)
+            for segment in self.__pre_context_list_trg
+        ]
+        post_context_list_trg = [
+            tuple(str(match) for match in segment)
+            for segment in self.__post_context_list_trg
+        ]
+        df = pd.DataFrame(list(zip(pre_context_list_src,
+                                   segments_l1_qual,
+                                   post_context_list_src,
+                                   pre_context_list_trg,
+                                   segments_l2_qual,
+                                   post_context_list_trg,
+                                   self.__files)),
+                          columns=["Match Pre-Context l1",
+                                   "Match l1",
+                                   "Match Post-Context l1",
+                                   "Match Pre-Context l2",
+                                   "Match l2",
+                                   "Match Post-Context l2",
+                                   "Files"])
+        # remove duplicate rows
+        df.drop_duplicates(keep='first', inplace=True)
+        df.reset_index(drop=True, inplace=True)
         # write content to text file
         with open(path, "w", encoding="utf-8") as file_out:
             # throw everything together for formatting
             for (pre_con_src, match_src, post_con_src,
                  pre_con_trg, match_trg, post_con_trg, file) in \
-                    zip(self.__pre_context_list_src,
-                        self.__segments_l1_qual,
-                        self.__post_context_list_src,
-                        self.__pre_context_list_trg,
-                        self.__segments_l2_qual,
-                        self.__post_context_list_trg,
-                        self.__files):
+                    zip(df["Match Pre-Context l1"],
+                        df["Match l1"],
+                        df["Match Post-Context l1"],
+                        df["Match Pre-Context l2"],
+                        df["Match l2"],
+                        df["Match Post-Context l2"],
+                        df["Files"]):
                 # write results in string format
                 # chr(10) = "\n"
                 file_out.write(
@@ -290,12 +325,12 @@ class BilingualContext:
                                    post_con_merged_src, pre_con_merged_trg,
                                    matches_trg, post_con_merged_trg,
                                    self.__files, regex_list)),
-                          columns=[f"Match Pre-Context "
+                          columns=[f"Match Pre-Context: "
                                    f"(-{self.__pre_context})",
                                    f"Match {l1}",
                                    f"Match Post-Context: "
                                    f"(+{self.__post_context})",
-                                   f"Translation Pre-Context "
+                                   f"Translation Pre-Context: "
                                    f"(-{self.__pre_context})",
                                    f"Match {l2}",
                                    f"Translation Post-Context: "
@@ -304,17 +339,18 @@ class BilingualContext:
                                    "Regex"])
         # remove duplicate rows
         df.drop_duplicates(keep='first', inplace=True)
+        df.reset_index(drop=True, inplace=True)
         # write dataframe to csv
         df.to_csv(path, encoding="utf-8")
         return path
 
 
 if __name__ == "__main__":
-    context = BilingualContext(path="../data/generated/alignments_fr_es_500_parsed.txt",
-                               regex=r"Comment", pre_context=2, post_context=2, anno=True, caseinsensitive=True)
+    context = BilingualContext(path="../data/generated/alignments_en_fr_1000_parsed.txt",
+                               regex=r"the\s", pre_context=1, post_context=1, anno=True, caseinsensitive=False)
 
-    context.write_context_quant_bil(l1="French", l2="Spanish",
+    context.write_context_quant_bil(l1="English", l2="French",
                                     root_path="../data/search_results/")
-    context.write_context_qual_bil(l1="French",
-                                   l2="Spanish",
+    context.write_context_qual_bil(l1="English",
+                                   l2="French",
                                    root_path="../data/search_results/")
