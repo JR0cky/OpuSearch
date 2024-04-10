@@ -2,6 +2,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 from pathlib import Path
 import streamlit as st
 import pandas as pd
@@ -381,6 +382,7 @@ class SearchAlign:
     def __call_search_func(self):
         scroll_top()
         with st.spinner(self.__search_text):
+            time.sleep(5)
             parse_param = False if self.__parse_search == "normal" else True
             if not self.__stats and not self.__context:
                 self.__no_selection()
@@ -469,6 +471,7 @@ class SearchAlign:
     def __messages(self):
         # only show messages and paths if selected
         if self.__show_messages:
+            scroll_top()
             if self.__context and self.__stats:
                 self.__message_file_creation_all(path_stats=self.__path_stats,
                                                  path_quant=self.__path_quant,
