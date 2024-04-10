@@ -80,7 +80,7 @@ class PreprocessingParsed:
                     if current_left.startswith("="):
                         break
                     else:
-                        pre.insert(0, current_left.strip("\n"))
+                        pre.insert(0, current_left.strip("\n "))
                         count_left += 1
                 except IndexError:
                     break
@@ -90,14 +90,14 @@ class PreprocessingParsed:
                     current_right = self.__lines[index + count_right + 1]
                     if current_right.startswith("="):
                         break
-                    post.append(current_right.strip("\n"))
+                    post.append(current_right.strip("\n "))
                     count_right += 1
                 except IndexError:
                     break
             # merge segments to one list
             # and append to (nested) list of segments
             self.__alignments_parsed.append(pre +
-                                            [self.__lines[index].strip("\n")]
+                                            [self.__lines[index].strip("\n ")]
                                             + post)
             pre_free = [self.__split_string_meta(
                 elem, all_meta=False) for elem in pre]
@@ -115,15 +115,16 @@ class PreprocessingParsed:
                                 for inner_list in post_free]
 
             # Join the outer lists
-            self.__alignments.append("".join(joined_pre_free) + " "
-                                     + line_element + " "
-                                     + "".join(joined_post_free))
+            # Join the outer lists
+            self.__alignments.append(" ".join(map(str.strip, joined_pre_free)) + " " +
+                                     line_element.strip() + " " +
+                                     " ".join(map(str.strip, joined_post_free)))
 
     @staticmethod
     def __split_string_meta(text, all_meta=True):
         token = []
         # convert list entry to string
-        text = "".join(text)
+        text = "".join(text).strip()
         # correct minor errors in pattern before accessing data
         # text = re.sub(" ~", "~", text)
         # text = re.sub("- ", "-", text)
@@ -216,7 +217,7 @@ class PreprocessingParsed:
                 match_counter += 1
                 if match_counter <= len(self.__mono_matches):
                     current_alignment_key = self.__mono_matches[
-                        match_counter - 1]
+                        match_counter - 1].strip()
                     # Use setdefault to initialize alignment level
                     current_level.setdefault(current_alignment_key, {})
                 if current_alignment_key:
@@ -244,7 +245,7 @@ class PreprocessingParsed:
                 alignment_counter += 1
                 if alignment_counter <= len(self.__alignments):
                     current_alignment_key = self.__alignments[
-                        alignment_counter - 1]
+                        alignment_counter - 1].strip()
                     # Use setdefault to initialize alignment level
                     current_level.setdefault(current_alignment_key, {})
                 if current_alignment_key:
