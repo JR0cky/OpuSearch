@@ -377,7 +377,7 @@ class BilingualStats:
 
 
 if __name__ == "__main__":
-    bilingual = BilingualStats(path="../data/generated/alignments_fr_es_500_parsed.txt",
-                               regex=r'Comment', src_aggregate=False, parsed=True, caseinsensitive=True)
-    bilingual.write_bilingual_stats(l1="French", l2="Spanish",
+    bilingual = BilingualStats(path="../data/generated/alignments_en_fr_1000_parsed.txt",
+                               regex=r'the\s', src_aggregate=True, parsed=True, caseinsensitive=False)
+    bilingual.write_bilingual_stats(l1="French", l2="English",
                                     root_path="../data/search_results/")
