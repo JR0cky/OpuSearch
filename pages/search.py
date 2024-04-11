@@ -6,7 +6,7 @@ import time
 from pathlib import Path
 import streamlit as st
 import pandas as pd
-from resources import edit_design, scroll_top, rename_files, info_external_hard_drive
+from resources import edit_design, scroll_top, rename_files, info_external_hard_drive, info_cwd
 from model.monolingual_context import MonolingualContext
 from model.bilingual_context import BilingualContext
 from model.monolingual_statistics import MonolingualStats
@@ -22,6 +22,9 @@ st.set_page_config(page_title="Search Data", page_icon="🔎", layout="centered"
 
 class SearchAlign:
     def __init__(self):
+        # set current working directory to be displayed
+        if "cwd" not in st.session_state:
+            st.session_state["cwd"] = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         # get path to root
         self.__search_path = None
         # path variable for source files on external hard drive
@@ -372,8 +375,6 @@ class SearchAlign:
                     st.number_input(label="Number of Lines for Pre-Context", value=1, key="pre_context")
                     st.number_input(label="Number of Lines for Post-Context", value=1, key="post_context")
                     st.checkbox("Keep Annotations for Context", value=True, key="anno")
-                if self.__stats and self.__lang_mode == "bilingual":
-                    st.checkbox("Summarise Lines for 'src' ", value=True, key="aggr_src")
                 st.checkbox("Show Paths for Created Files", value=True, key="show_messages")
                 add_vertical_space(3)
                 st.button("Do the Search!", key="search",
@@ -451,9 +452,8 @@ class SearchAlign:
                         self.__no_matches()
                         return
                 if self.__stats:
-                    src_aggr_param = True if self.__aggr_src else False
                     bil_matches = BilingualStats(path=self.__search_path,
-                                                 regex=self.__regex, src_aggregate=src_aggr_param,
+                                                 regex=self.__regex, src_aggregate=True,
                                                  parsed=parse_param,
                                                  caseinsensitive=st.session_state["ignore_case"])
                     counts = bil_matches.get_counts()
@@ -507,6 +507,8 @@ class SearchAlign:
     def build(self):
         rename_files()
         edit_design()
+        info_cwd(st)
+        add_vertical_space(1)
         st.title("Search Alignments", anchor=False)
         add_vertical_space(2)
         info_external_hard_drive(st, page="search")

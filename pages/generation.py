@@ -7,7 +7,7 @@ import pandas as pd
 from io import StringIO
 from pathlib import Path
 from streamlit_extras.add_vertical_space import add_vertical_space
-from resources import edit_design, rename_files, info_external_hard_drive
+from resources import edit_design, rename_files, info_external_hard_drive, info_cwd
 
 # TODO fix error alignment file could not be created or is empty for existing files
 
@@ -16,6 +16,9 @@ st.set_page_config(page_title="Data generation", page_icon="⚙️", layout="cen
 
 class GenAlign:
     def __init__(self):
+        # set current working directory to be displayed
+        if "cwd" not in st.session_state:
+            st.session_state["cwd"] = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         # path variables for subscript
         self.__script_path = None
         self.__src_path = None
@@ -60,7 +63,7 @@ class GenAlign:
     def __handle_paths(self):
         # Determine the current directory
         current_directory = os.path.dirname(os.path.abspath(__file__))
-        # Cut off the last directory of the current directoryif
+        # Cut off the last directory of the current directory
         parent_directory = os.path.dirname(current_directory)
         # Construct the paths relative to the parent directory
         self.__script_path = Path(os.path.join(parent_directory, "model", "get_alignments.py")).as_posix()
@@ -368,6 +371,8 @@ class GenAlign:
     def build(self):
         rename_files()
         edit_design()
+        info_cwd(st)
+        add_vertical_space(1)
         st.title("Generate Alignments", anchor=False)
         add_vertical_space(2)
         info_external_hard_drive(st, page="generation")

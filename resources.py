@@ -82,6 +82,11 @@ def app_appear():
     custom = """
     <style>
     header {visibility: hidden;}
+    div[data-testid="stNotification"] {
+        border: 2px solid rgba(255, 255, 255, 0.7); /* Opaque white border */
+        padding: 10px; /* Adjust padding as needed */
+        background-color: transparent; /* Transparent background */
+    }
     div[data-testid="stAppViewContainer"] {
             background: linear-gradient(86deg, rgba(20,45,160,1) 54%, rgba(35,117,174,1) 98%);
     </style>
@@ -172,4 +177,5 @@ def info_external_hard_drive(st, page=None):
         st.page_link("pages/external_drive.py", icon="💾", label="Use an external harddrive for your data.")
 
 
-
+def info_cwd(st):
+    st.info(f"Your Current Working directory: {st.session_state['cwd']}")

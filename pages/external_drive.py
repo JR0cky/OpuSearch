@@ -4,10 +4,13 @@ import os
 import streamlit as st
 from pathlib import Path
 from streamlit_extras.add_vertical_space import add_vertical_space
-from resources import edit_design
+from resources import edit_design, info_cwd
 
 
 st.set_page_config(page_title="External Hard Drive", page_icon="💾️", layout="centered")
+# set current working directory to be displayed
+if "cwd" not in st.session_state:
+    st.session_state["cwd"] = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def intro():
@@ -66,6 +69,7 @@ def assign_paths_harddrive():
     empty_file_path = os.path.join(subdirectory_paths[1], "-")
     with open(empty_file_path, "w") as empty_file:
         pass  # Just creating an empty file
+    st.session_state["cwd"] = folder_path
     st.session_state["src_path_hard"] = subdirectory_paths[0]
     st.session_state["gen_path_hard"] = subdirectory_paths[1]
     st.session_state["search_path_hard"] = subdirectory_paths[2]
@@ -98,6 +102,8 @@ def message_generation(paths):
 
 def build():
     edit_design()
+    info_cwd(st)
+    add_vertical_space(1)
     intro()
 
 

@@ -1,7 +1,11 @@
+import os
 import streamlit as st
 from streamlit_extras.add_vertical_space import add_vertical_space
 from resources import edit_design, rename_files
 st.set_page_config(page_title="Introduction", page_icon="📖", layout="centered")
+# set current working directory to be displayed
+if "cwd" not in st.session_state:
+    st.session_state["cwd"] = os.path.dirname(os.path.abspath(__file__))
 
 
 def show_intro():
