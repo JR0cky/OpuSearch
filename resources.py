@@ -178,9 +178,6 @@ def app_appear():
             )
 
 
-
-
-
 def shut_down():
     # Give a bit of delay for user experience
     time.sleep(2.5)
