@@ -117,3 +117,20 @@ You will be asked to enter your email in the terminal if you start the app for t
 You can skip this step by pressing ENTER. 
 
 Afterwards, the app will be opened in a new tab in your default browser.
+
+### 6. Closing the Streamlit App
+You can stop the application by either pressing *CTRL + C* in the terminal 
+or pressing the button *Close Application*. 
+If you just close the browser window, we advise you shut down the terminal
+and run the app again in a new terminal.
+
+
+
+### 7. Updating the Streamlit App
+
+In case there was an update you can run the following command to download
+the changes from this repository before running the app as usual:
+
+```
+git pull origin
+```
