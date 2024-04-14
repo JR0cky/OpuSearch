@@ -134,3 +134,9 @@ the changes from this repository before running the app as usual:
 ```
 git pull origin
 ```
+Also make sure to add new packages in case the requirements.txt has been updated:
+
+```
+pip install -r requirements.txt
+```
+
