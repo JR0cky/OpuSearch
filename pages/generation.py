@@ -99,8 +99,16 @@ class GenAlign:
                 st.selectbox(label="target language",
                              options=self.__final_format, key="trg")
             with col3:
+                # Display the number input
                 st.number_input(
-                    label="maximum number of alignments", value=10, key="limit")
+                    label="Maximum number of alignments",
+                    value=10000000,
+                    key="limit",
+                    help="You can enter small numbers (i.e. 10 or 100) for testing purposes. "
+                         "However, the corpus is designed for large-scale searches because "
+                         "individual misalignments will skew small scale search results "
+                         "much more than large scale search results."
+                )
             add_vertical_space(2)
             st.form_submit_button("Generate Data", on_click=self.__generate)
 
