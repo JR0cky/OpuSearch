@@ -49,7 +49,7 @@ class GenAlign:
                                "This may take a while ⏳. " \
                                "The alignments will be generated right after."
         self.__generate_text = "The alignments are being generated. " \
-                               "Please wait a moment ☕."
+                               "Please wait ☕."
         # capture whether parsed or normal file was selected for search
         self.__parse_search = None
 
@@ -313,29 +313,29 @@ class GenAlign:
             st.markdown(styled, unsafe_allow_html=True)
         else:
             try:
-                st.markdown(
-                    f"""
-                       <div style="background-color: rgba(255, 255, 255, 0.8);
-                        padding: 10px;
-                        border-radius: 5px;
-                         color: black;">
-                        You need to download the following source files to generate alignments.
-                        How do you want to proceed?</div> """,
-                    unsafe_allow_html=True)
-                add_vertical_space(1)
-                # Parsing logic using other method
-                for data in parsed_data:
-                    st.markdown(
-                        f"""<div style="background-color: rgba(255, 255, 255, 0.8);
-                                    padding: 10px;
-                                    border-radius: 5px;
-                                     color: black;">
-                                    <strong>File</strong>: {data['url']} &nbsp;&nbsp;&nbsp; 
-                                    <strong>Size</strong>: {data['size']}
-                                </div>""",
-                        unsafe_allow_html=True)
+                # Concatenate the text of items with a line break
+                parsed_data_text = "<br>".join(
+                    [f"<strong>File</strong>: {data['url']} &nbsp;&nbsp;&nbsp; <strong>Size</strong>: {data['size']}"
+                     for data in parsed_data])
+                # Define the content of each markdown block
+                block1_text = "You need to download the following source files to generate alignments. How do you " \
+                              "want to proceed?<br>"
+                block3_text = "<br><b>NOTE: If you are using an external hard drive, the files need to be stored and " \
+                              "accessed there. Select the hard drive and repeat the process</b>."
 
-                add_vertical_space(1)
+                # Concatenate the text of each markdown block with line breaks
+                content = "<br>".join([block1_text, parsed_data_text, block3_text])
+
+                # Create a single div containing all concatenated text
+                markdown_content = f"""<div style="background-color: rgba(255, 255, 255, 0.8);
+                                                padding: 10px;
+                                                border-radius: 5px;
+                                                color: black;">
+                                                {content}
+                                        </div>"""
+                # Render the markdown content
+                st.markdown(markdown_content, unsafe_allow_html=True)
+                add_vertical_space(2)
                 col1, col2 = st.columns(2)
                 with col1:
                     st.button("Download Data",
