@@ -1,5 +1,8 @@
 import os
 import re
+import time
+import keyboard
+import psutil
 import toml
 import pandas as pd
 import streamlit as st
@@ -155,11 +158,38 @@ def app_appear():
                     "([Jörg Tiedemann](https://scholar.google.com/citations?user=j6V-rOUAAAAJ))  "
                     "and [opustools](https://pypi.org/project/opustools/) "
                     "([Aulamo et al. 2020](https://aclanthology.org/2020.lrec-1.467/)).")
-        for i in range(0, 5):
-            st.sidebar.markdown("<br>", unsafe_allow_html=True)
-        st.markdown('<span style="color:orange;"><b>Warning:<br></b></span>', unsafe_allow_html=True)
-        st.markdown('<span style="color:orange;">Do not delete any folders or files from the existing structure,'
+        st.sidebar.markdown("<br>", unsafe_allow_html=True)
+        st.markdown('<span style="color:orange;"><b>Warning:</b><br>Do not delete any folders or files from '
+                    'the existing structure,'
                     ' as this may cause the application to crash.</span>', unsafe_allow_html=True)
+        st.sidebar.markdown("<br>", unsafe_allow_html=True)
+        st.sidebar.button("Close Application", on_click=shut_down)
+        st.sidebar.markdown("<br>", unsafe_allow_html=True)
+        col1, col2 = st.sidebar.columns([1, 3])
+        with col1:
+            st.image("data/github.png", use_column_width="always")
+        with col2:
+            # Add some CSS styling to align the link with the center of the image
+            st.markdown("<br>", unsafe_allow_html=True)
+            st.markdown(
+                '<div style="display: flex; align-items: center;"><a href="https://github.com/JR0cky/OpuSearch">'
+                'Link to Github Repository</a></div>',
+                unsafe_allow_html=True
+            )
+
+
+
+
+
+def shut_down():
+    # Give a bit of delay for user experience
+    time.sleep(2.5)
+    # Close streamlit browser tab
+    keyboard.press_and_release('ctrl+w')
+    # Terminate streamlit python process
+    pid = os.getpid()
+    p = psutil.Process(pid)
+    p.terminate()
 
 
 def edit_design():
