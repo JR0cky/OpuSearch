@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Rockstroh"
+  given-names: "Johanna"
+  orcid: "https://orcid.org/0009-0008-2320-7289"
+- family-names: "Fliessbach"
+  given-names: "Jan"
+  orcid: "https://orcid.org/0000-0002-1575-8477"
+title: "OpuSearch"
+version: 1.0
+doi: 10.5281/zenodo.12742554 
+date-released: 2024-07-15
+url: "https://github.com/JR0cky/OpuSearch"
