@@ -144,3 +144,16 @@ Also make sure to add new packages in case the requirements.txt has been updated
 pip install -r requirements.txt
 ```
 
+### 8. Citing the Software
+
+If you use this software in your work, please cite it using the following metadata:
+
+@software{Rockstroh_OpuSearch_2024,
+author = {Rockstroh, Johanna and Fliessbach, Jan},
+doi = {10.5281/zenodo.12742554},
+month = jul,
+title = {{OpuSearch}},
+url = {https://github.com/JR0cky/OpuSearch},
+version = {1.0},
+year = {2024}
+}
