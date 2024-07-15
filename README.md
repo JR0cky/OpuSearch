@@ -1,3 +1,7 @@
+
+[![DOI](https://zenodo.org/badge/765045081.svg)](https://zenodo.org/doi/10.5281/zenodo.12742553)
+
+
 # OpuSearch
 This is a Streamlit Application for the software project *OpuSearch*.
 
