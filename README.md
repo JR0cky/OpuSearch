@@ -152,7 +152,7 @@ If you use this software in your work, please cite it using the following metada
 author = {Rockstroh, Johanna and Fliessbach, Jan}, <br>
 doi = {10.5281/zenodo.12742554}, <br>
 month = jul, <br>
-title = {{OpuSearch}}, <br>
+title = {{OpuSearch: Application and GUI to generate and search alignments from OPUS OpenSubtitles}}, <br>
 url = {https://github.com/JR0cky/OpuSearch}, <br>
 version = {1.0}, <br>
 year = {2024} <br>
