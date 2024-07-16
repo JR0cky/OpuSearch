@@ -148,7 +148,7 @@ pip install -r requirements.txt
 
 If you use this software in your work, please cite it using the following metadata:
 
-@software{Rockstroh_OpuSearch_2024, <br>
+@software{RockstrohFliessbach2024OpuSearch, <br>
 author = {Rockstroh, Johanna and Fliessbach, Jan}, <br>
 doi = {10.5281/zenodo.12742554}, <br>
 month = jul, <br>
