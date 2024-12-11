@@ -17,7 +17,7 @@ Open a command line tool of your choice. <br>
 #### 2.2. 
 Navigate to your preferred local directory, ideally something like "Documents". Make sure that this is not a cloud folder, as the software will store large amounts of data to work.
 For navigating in **Windows** you can go to the preferred directory via the Explorer and open a Git Bash or cmd 
-there using the context menu with right-click. Otherwise, you can use **cd** to change the directory over the commandline (on all operating systems). To make things easier you can copy the path to your preferred directory from your file explorer or finder and put it after **cd**. <br>
+there using the context menu with right-click. Otherwise, you can use **cd** to change the directory over the commandline (on all operating systems). To make things easier you can copy the path to your preferred directory from your file explorer or finder and put it after **cd**. Beware that Git Bash uses */* whereas Windows uses *\\* to separate the path components.<br>
 #### 2.3. 
 Once you have arrived at the desired locarion, copy and paste the following command:
 
